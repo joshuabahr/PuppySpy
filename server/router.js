@@ -5,4 +5,4 @@ router.post('/user/signup', userController.signupUser);
 router.get('/user/profile/:userId', userController.fetchUserProfile);
 router.put('/user/profile/:userId', userController.editUserProfile);
 
-module.export = router;
+module.exports = router;

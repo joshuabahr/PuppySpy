@@ -17,11 +17,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', router);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../static/index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 init()

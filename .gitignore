@@ -11,3 +11,5 @@ _site/
 *.iml
 .idea/
 config.js
+yarn-error.log
+yarn-debug.log

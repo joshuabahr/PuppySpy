@@ -11,5 +11,6 @@ _site/
 *.iml
 .idea/
 config.js
-yarn-error.log
-yarn-debug.log
+yarn-error.log*
+yarn-debug.log*
+frontend/Auth/auth0-variables.js

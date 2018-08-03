@@ -23,9 +23,9 @@ const Callback = () => {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid"
-        class="uil-ring"
+        className="uil-ring"
       >
-        <rect x="0" y="0" width="100" height="100" fill="none" class="bk" />
+        <rect x="0" y="0" width="100" height="100" fill="none" className="bk" />
         <defs>
           <filter id="uil-ring-shadow" x="-100%" y="-100%" width="300%" height="300%">
             <feOffset result="offOut" in="SourceGraphic" dx="0" dy="0" />

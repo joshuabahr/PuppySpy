@@ -1,21 +1,21 @@
 /* eslint-disable */
 
-import auth0 from 'auth0-js';
-
-import AUTH_CONFIG from './auth0-variables';
 import history from '../history';
+import auth0 from 'auth0-js';
+import AUTH_CONFIG from './auth0-variables';
+
 
 export default class Auth {
-  auth0 = new auth0.WebAuth({
-    domain: AUTH_CONFIG.domain,
-    clientID: AUTH_CONFIG.clientID,
-    redirectUri: AUTH_CONFIG.callbackUrl,
-    audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-    responseType: 'token id_token',
-    scope: 'openid'
-  });
-
+  
   constructor() {
+    this.auth0 = new auth0.WebAuth({
+      domain: AUTH_CONFIG.domain,
+      clientID: AUTH_CONFIG.clientID,
+      callbackUrl: AUTH_CONFIG.callbackUrl,
+      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      responseType: 'token id_token',
+      scope: 'openid profile email'
+    });
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -31,7 +31,7 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        history.replace('/');
+        history.replace('/home');
       } else if (err) {
         history.replace('/');
         console.log('error in handleAuthentication ', err);
@@ -45,7 +45,7 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-    history.replace('/');
+    history.replace('/home');
   }
 
   logout() {

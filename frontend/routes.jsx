@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 
 import Landing from './Landing';
 import Profile from './Profile';
@@ -7,7 +7,7 @@ import Test from './Test';
 import Callback from './Callback';
 import Auth from './Auth/Auth';
 import Home from './Home';
-import history from './history';
+
 
 const auth = new Auth();
 
@@ -21,13 +21,18 @@ const handleAuthentication = ({ location }) => {
 
 const Routes = () => (
   <div className="app">
-    <BrowserRouter history={history}>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/" render={props => <Landing auth={auth} {...props} />} />
 
         <Route exact path="/profile" component={Profile} />
 
-        <Route exact path="/home" render={props => <Home auth={auth} {...props} />} />
+        <Route exact path="/home" render={props => (!auth.isAuthenticated() ? (
+          <Redirect to='/' />
+        ) : (
+          <Home auth={auth} {...props} />
+        )
+        )} />
 
         <Route path="/test" component={Test} />
 

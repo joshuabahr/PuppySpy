@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -6,11 +8,13 @@ import Auth from './Auth/Auth';
 const auth0 = new Auth();
 
 class Landing extends Component {
-  static logout() {
-    auth0.logout();
+  
+  constructor(props) {
+    super(props);
+    this.logout = this.logout.bind(this);
   }
 
-  static registerUser(profile) {
+  registerUser(profile) {
     axios
       .post(`api/user/signup`, profile)
       .then(response => {
@@ -19,6 +23,10 @@ class Landing extends Component {
       .catch(error => {
         console.log('error in registerUser ', error);
       });
+  }
+
+  logout() {
+    auth0.logout();
   }
 
   /*
@@ -33,10 +41,6 @@ class Landing extends Component {
   }
 */
 
-  constructor(props) {
-    super(props);
-    this.logout = this.logout.bind(this);
-  }
 
   componentDidMount() {
     auth0.getProfile((error, profile) => {

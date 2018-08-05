@@ -19,9 +19,9 @@ const handleAuthentication = ({ location }) => {
   }
 };
 
-const Routes = () => (
-  <div className="app">
-    <BrowserRouter>
+const App = () => (
+  <BrowserRouter>
+    <div className="app">
       <Switch>
         <Route exact path="/" render={props => <Landing auth={auth} {...props} />} />
 
@@ -46,8 +46,8 @@ const Routes = () => (
 
         <Route component={Missing} />
       </Switch>
-    </BrowserRouter>
-  </div>
+    </div>
+  </BrowserRouter>
 );
 
-export default Routes;
+export default App;

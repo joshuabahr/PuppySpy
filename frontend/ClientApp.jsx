@@ -1,9 +1,15 @@
-import ReactDOM from 'react-dom';
-import Routes from './routes';
+import React from 'react';
+import { render } from 'react-dom';
+import App from './App';
 
-const routes = Routes();
+const renderApp = () => {
+  render(<App />, document.getElementById('app'))
+}
 
-ReactDOM.render(
-  routes,
-  document.getElementById('app')
-);
+renderApp();
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    renderApp();
+  });
+}

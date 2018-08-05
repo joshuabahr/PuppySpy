@@ -1,9 +1,15 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
   context: __dirname,
-  entry: './frontend/ClientApp.jsx',
+  entry: [
+    'react-hot-loader/patch',
+    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
+    'webpack/hot/only-dev-server',
+    './frontend/ClientApp.jsx'
+  ],
   devtool: 'cheap-eval-source-map',
   output: {
     path: path.join(__dirname, 'public'),
@@ -17,10 +23,15 @@ module.exports = {
     reasons: true,
     chunks: true
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
+  ],
   module: {
     rules: [
       {
         test: /\.jsx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader'
       }
     ]

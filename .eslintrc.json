@@ -1,6 +1,7 @@
 {
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "camelcase": "off"
   },
   "extends": ["airbnb", "prettier", "prettier/react"],
   "plugins": ["prettier"],

@@ -8,6 +8,7 @@ const User = db.define('user', {
 });
 
 const Cam = db.define('cam', {
+  camName: Sequelize.STRING,
   active: Sequelize.BOOLEAN,
   password: Sequelize.STRING
 })

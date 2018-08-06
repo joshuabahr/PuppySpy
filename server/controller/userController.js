@@ -8,7 +8,7 @@ const signupUser = (req, res) => {
     },
     defaults: {
       name: req.body.name,
-      cam: false
+      phone: req.body.phone
     }
   })
     .spread((response, isCreated) => {
@@ -28,7 +28,7 @@ const editUserProfile = (req, res) => {
   Table.User.update(
     {
       name: req.body.name,
-      cam: req.body.cam
+      phone: req.body.phone
     },
     {
       where: { id: req.body.id },

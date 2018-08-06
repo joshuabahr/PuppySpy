@@ -1,7 +1,8 @@
 {
   "rules": {
     "no-console": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "class-methods-use-this": "off"
   },
   "extends": ["airbnb", "prettier", "prettier/react"],
   "plugins": ["prettier"],

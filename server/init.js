@@ -2,6 +2,7 @@ const db = require('./db/db');
 const Table = require('./models/tableModels');
 
 // to force refresh database, set dropDB to true
+// !!!! all data will be lost !!!!
 const dropDB = false;
 
 

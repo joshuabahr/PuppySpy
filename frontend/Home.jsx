@@ -6,7 +6,6 @@ import Auth from './Auth/Auth';
 const auth0 = new Auth();
 
 class Home extends Component {
-  
   constructor(props) {
     super(props);
     this.logout = this.logout.bind(this);
@@ -40,6 +39,7 @@ class Home extends Component {
     .post(`api/user/signup`, profile)
     .then(response => {
       console.log(response.data);
+      this.userStore.logInUser(response.data);
     })
     .catch(error => {
       console.log('error in registerUser ', error);

@@ -2,7 +2,8 @@
   "rules": {
     "no-console": "off",
     "camelcase": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "react/prop-types": "off"
   },
   "extends": ["airbnb", "prettier", "prettier/react"],
   "plugins": ["prettier"],

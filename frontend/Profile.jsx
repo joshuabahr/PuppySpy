@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Profile = () => (
-  <div>
-    <h1>This is the Profile page</h1>
-  </div>
-);
+const Profile = (props) => (
+    <div>
+      <h1>Welcome, {props.userStore.name}</h1>
+    </div>
+  )
+;
 
 export default Profile;

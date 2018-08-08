@@ -27,7 +27,7 @@ const Main = () => (
             handleAuthentication(props);
             return <Callback {...props} />;
           }} />
-      <Route path='/Profile' component={Profile} />
+      <Route path='/Profile' render={props => (<Profile {...props} />)} />
       <Route path='/Test' component={Test} />
       <Route exact path="/Home" render={props => (!auth.isAuthenticated() ? (
           <Redirect to='/' />

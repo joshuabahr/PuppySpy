@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Profile = (props) => (
+const Profile = ({ userStore }) => (
     <div>
-      <h1>Welcome, {props.userStore.name}</h1>
+      <h1>Welcome, {userStore.name}</h1>
     </div>
   )
 ;

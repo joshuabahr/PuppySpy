@@ -1,7 +1,7 @@
 import React from 'react';
+import { Provider } from 'unstated';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'unstated';
 import App from './App';
 
 const renderApp = () => {

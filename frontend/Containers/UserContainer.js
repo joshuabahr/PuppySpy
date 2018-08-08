@@ -8,29 +8,34 @@ class UserContainer extends Container {
     phone: null
   }
 
-  logInUser(profile) {
+  logInUser = (profile) => {
     this.setState({
       loggedIn: true,
       name: profile.name,
       email: profile.email,
       phone: null
     })
-  }
-
-  setPhoneNumber(phone) {
-    this.setState({
-      phone
+    .then(() => {
+      console.log('userStore login state ', this.state);
     })
   }
 
-  logOutUser() {
+  setPhoneNumber = (phone) => {
+    this.setState({
+      phone
+    })
+    console.log('register phone number ', this.state);
+  }
+
+  logOutUser = () => {
     this.setState({
       loggedIn: false,
       name: null,
       email: null,
       phone: null
     })
+    console.log('user logged out ', this.state);
   }
 }
 
-export default UserContainer;
+export {UserContainer};

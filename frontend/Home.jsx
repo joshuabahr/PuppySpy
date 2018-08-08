@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Auth from './Auth/Auth';
 
@@ -25,6 +24,7 @@ class Home extends Component {
  
  
  componentDidMount() {
+   console.log('props ', this.props);
    auth0.getProfile((error, profile) => {
      if (!profile) {
        console.log('error in getProfile ', error);
@@ -39,7 +39,7 @@ class Home extends Component {
     .post(`api/user/signup`, profile)
     .then(response => {
       console.log(response.data);
-      this.userStore.logInUser(response.data);
+      this.props.userStore.logInUser(response.data);
     })
     .catch(error => {
       console.log('error in registerUser ', error);
@@ -53,16 +53,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <h1>This is the Landing Page</h1>
-        <Link to="/" onClick={this.logout}>
-          Log Out
-        </Link>
-        <br />
-        <Link to="/Profile">Profile</Link>
-        <br />
-        <Link to="/Test">Test</Link>
-        <br />
-        <Link to="/Callback">Callback</Link>
+        <h1>This is the Home Page</h1>
+        <h4>Thanks for loggin in </h4>
       </div>
     );
   }

@@ -12,6 +12,11 @@ class Header extends Component {
     this.logout = this.logout.bind(this);
   }
   
+  componentDidMount() {
+    console.log('header props ', this.props);
+  }
+
+
   login() {
     auth.login();
   }

@@ -9,7 +9,11 @@ router.put('/user/profile/:userId', userController.editUserProfile);
 
 // Cam routing
 router.post('/cam/create', camController.createCam);
-router.get('/cam/:userId', camController.fetchUserCams);
+router.get('/cam/:userId', camController.fetchActiveUserCams);
+router.get('/cam/all/:userId', camController.fetchAllUserCams);
+router.get('/cam/personal/:userId', camController.fetchPersonalCams);
+router.put('/cam/name', camController.updateCamName);
+router.put('/cam/password', camController.updateCamPassword);
 router.post('/cam/adduser', camController.addAllowedCam);
 router.put('/cam/close', camController.closeCam);
 

@@ -12,8 +12,6 @@ const createCam = (req, res) => {
     }
   })
   .spread((response, isCreated) => {
-    console.log('create cam response ', response.id);
-    console.log('create cam isCreated ', isCreated);
     if (isCreated) {
       Table.User_Cam.findOrCreate({
         where: {
@@ -31,7 +29,46 @@ const createCam = (req, res) => {
   })
 }
 
-const fetchUserCams = (req, res) => {
+const fetchActiveUserCams = (req, res) => {
+  Table.User_Cam.findAll({
+    where: {
+      userId: req.params.userId
+    },
+    include: [
+      {
+        model: Table.Cam, 
+        where: { active: true }
+      }
+    ]
+  })
+  .then((response) => {
+    res.status(200).send(response);
+  })
+  .catch((error) => {
+    res.send(error);
+  });
+};
+
+const fetchAllUserCams = (req, res) => {
+  Table.User_Cam.findAll({
+    where: {
+      userId: req.params.userId
+    },
+    include: [
+      {
+        model: Table.Cam
+      }
+    ]
+  })
+  .then((response) => {
+    res.status(200).send(response);
+  })
+  .catch((error) => {
+    res.send(error);
+  });
+};
+
+const fetchPersonalCams = (req, res) => {
   Table.User.findAll({
     include: [
       {
@@ -42,6 +79,30 @@ const fetchUserCams = (req, res) => {
   })
   .then((response) => {
     res.status(200).send(response);
+  })
+  .catch((error) => {
+    res.send(error);
+  })
+}
+
+const updateCamName = (req, res) => {
+  Table.Cam.update({
+    camName: req.body.camName
+  }, { where: { id: req.body.camId }})
+  .then(() => {
+    res.status(201).send('successfully updated cam name ');
+  })
+  .catch((error) => {
+    res.send(error);
+  })
+}
+
+const updateCamPassword = (req, res) => {
+  Table.Cam.update({
+    password: req.body.password
+  }, { where: { id: req.body.camId }})
+  .then(() => {
+    res.status(201).send('updated cam password');
   })
   .catch((error) => {
     res.send(error);
@@ -77,7 +138,6 @@ const addAllowedCam = (req, res) => {
   .catch((error) => {
     res.send(error);
   })
-
 }
 
 const closeCam = (req, res) => {
@@ -92,4 +152,4 @@ const closeCam = (req, res) => {
   })
 }
 
-module.exports = { createCam, fetchUserCams, addAllowedCam, closeCam };
+module.exports = { createCam, fetchAllUserCams, fetchPersonalCams, fetchActiveUserCams, updateCamName, updateCamPassword, addAllowedCam, closeCam };

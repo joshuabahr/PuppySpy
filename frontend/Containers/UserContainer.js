@@ -31,8 +31,7 @@ class UserContainer extends Container {
   }
 
   updateUserPhone = (phone) => {
-    let id = this.state.id;
-    axios.put(`/api/user/profile/${id}`, {
+    axios.put(`/api/user/profile/${this.state.id}`, {
       phone
     })
     .then((response) => {

@@ -24,9 +24,14 @@ const User_Cam = db.define('user_cam', {
 User.hasMany(Cam);
 Cam.belongsTo(User);
 
-User.belongsToMany(Cam, {as: 'userId', through: User_Cam})
+/* User.belongsToMany(Cam, {as: 'userId', through: User_Cam})
 Cam.belongsToMany(User, {as: 'camId', through: User_Cam})
+ */
 
+User.hasMany(User_Cam);
+User_Cam.belongsTo(User);
 
+Cam.hasMany(User_Cam);
+User_Cam.belongsTo(Cam);
 
 module.exports = { User, Cam, User_Cam };

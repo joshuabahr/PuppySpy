@@ -24,8 +24,8 @@ const User_Cam = db.define('user_cam', {
 User.hasMany(Cam);
 Cam.belongsTo(User);
 
-User.hasMany(User_Cam);
-User_Cam.belongsTo(User);
+User.belongsToMany(Cam, {as: 'userId', through: User_Cam})
+Cam.belongsToMany(User, {as: 'camId', through: User_Cam})
 
 
 

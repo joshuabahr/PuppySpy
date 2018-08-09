@@ -1,22 +1,49 @@
 import { Container } from 'unstated';
+import axios from 'axios';
 
 class UserContainer extends Container {
   state = {
     loggedIn: false,
     name: null,
     email: null,
-    phone: null
+    phone: null,
+    id: null,
+    updatePhone: ''
   }
 
   logInUser = (profile) => {
     this.setState({
+      id: profile.id,
       loggedIn: true,
       name: profile.name,
       email: profile.email,
-      phone: null
+      phone: profile.phone
     })
     .then(() => {
       console.log('userStore login state ', this.state);
+    })
+  }
+
+  handleInputChange = (e) => {
+    this.setState({
+      updatePhone: e.target.value
+    })
+  }
+
+  updateUserPhone = (phone) => {
+    let id = this.state.id;
+    axios.put(`/api/user/profile/${id}`, {
+      phone
+    })
+    .then((response) => {
+      console.log('successfully updated phone no ', response);
+      this.setState({
+        phone,
+        updatePhone: ''
+      })
+    })
+    .catch((error) => {
+      console.log('error updating phone no ', error);
     })
   }
 
@@ -29,6 +56,7 @@ class UserContainer extends Container {
 
   logOutUser = () => {
     this.setState({
+      id: null,
       loggedIn: false,
       name: null,
       email: null,
@@ -38,4 +66,4 @@ class UserContainer extends Container {
   }
 }
 
-export {UserContainer};
+export default UserContainer;

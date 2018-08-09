@@ -25,13 +25,13 @@ const signupUser = (req, res) => {
 };
 
 const editUserProfile = (req, res) => {
+  console.log('edit user profile ', req.body)
   Table.User.update(
     {
-      name: req.body.name,
       phone: req.body.phone
     },
     {
-      where: { id: req.body.id },
+      where: { id: req.params.userId },
       returning: true,
       plain: true
     }
@@ -42,7 +42,7 @@ const editUserProfile = (req, res) => {
 
 const fetchUserProfile = (req, res) => {
   Table.User.findOne({
-    where: { id: req.body.id }
+    where: { id: req.params.userId }
   })
     .then(response => {
       res.status(200).send(response);

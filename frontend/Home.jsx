@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Auth from './Auth/Auth';
 
-const auth0 = new Auth();
+const auth = new Auth();
 
 class Home extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Home extends Component {
  
  componentDidMount() {
    console.log('props ', this.props);
-   auth0.getProfile((error, profile) => {
+   auth.getProfile((error, profile) => {
      if (!profile) {
        console.log('error in getProfile ', error);
       } else {
@@ -47,14 +47,27 @@ class Home extends Component {
   }
 
   logout() {
-    auth0.logout();
+    auth.logout();
   }
 
   render() {
+    const { 
+      userStore: {
+        logInUser,
+        logOutUser,
+        setPhoneNumber,
+        state: {
+          loggedIn,
+          name,
+          email,
+          phone
+        }
+    }
+  } = this.props
     return (
       <div>
         <h1>This is the Home Page</h1>
-        <h4>Thanks for loggin in </h4>
+        <h4>Thanks for logging in, {name} </h4>
       </div>
     );
   }

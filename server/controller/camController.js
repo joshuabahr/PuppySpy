@@ -12,6 +12,8 @@ const createCam = (req, res) => {
     }
   })
   .spread((response, isCreated) => {
+    console.log('create cam response ', response.id);
+    console.log('create cam isCreated ', isCreated);
     if (isCreated) {
       Table.User_Cam.findOrCreate({
         where: {
@@ -30,14 +32,11 @@ const createCam = (req, res) => {
 }
 
 const fetchUserCams = (req, res) => {
-  Table.User_Cam.findAll({
-    where: {
-      userId: req.params.userId
-    },
+  Table.User.findAll({
     include: [
       {
         model: Table.Cam,
-        where: { active: true }
+        where: { userId: req.params.userId, active: true }
       }
     ]
   })

@@ -4,9 +4,8 @@ import { Subscribe } from 'unstated';
 import Callback from './Callback';
 import Home from './Home';
 import Profile from './Profile';
-import Test from './Test';
 import Auth from './Auth/Auth';
-import {UserContainer} from './Containers/UserContainer';
+import UserContainer from './Containers/UserContainer';
 
 const auth = new Auth();
 
@@ -25,20 +24,27 @@ const Main = () => {
   return (
     <main>
       <Switch>
-        <Route exact path='/' component={Landing} />
+        <Route exact path='/' render={(props) => (auth.isAuthenticated() ? (
+          <Redirect to='/Home' {...props}/>
+        ) : (
+          <Landing />
+        )
+        )} />
         <Route path="/callback"
             render={(props) => {
               handleAuthentication(props);
               return <Callback {...props} />;
             }} />
-        <Route path='/Profile' render={(props) => (
+        <Route path='/Profile' render={(props) => (!auth.isAuthenticated() ? (
+          <Redirect to='/' />
+        ) : (
           <Subscribe to={[UserContainer]}>
           {(userStore) => (
             <Profile userStore={userStore} {...props} />
           )}
           </Subscribe>
+        )
         )} />
-        <Route path='/Test' component={Test} />
         <Route exact path="/Home" render={(props) => (!auth.isAuthenticated() ? (
             <Redirect to='/' />
           ) : (

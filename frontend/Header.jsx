@@ -31,7 +31,6 @@ class Header extends Component {
       <ul>
         <li><Link to ='/' onClick={this.logout}>Log Out</Link></li>
         <li><Link to ='/Profile'>Profile</Link></li>
-        <li><Link to ='/Test'>Test</Link></li>
       </ul>
 
     const loggedOut = 

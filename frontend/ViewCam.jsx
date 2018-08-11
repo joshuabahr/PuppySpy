@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CamDetail from './CamDetail';
+import ViewCamDetail from './ViewCamDetail';
 
 class ViewCam extends Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class ViewCam extends Component {
     }
 
     if (activeCam) {
-      activeCamRender = <CamDetail cam={activeCam} />;
+      activeCamRender = <ViewCamDetail cam={activeCam} />;
     } else {
       activeCamRender = <h4>No active cam</h4>;
     }
@@ -50,18 +50,3 @@ class ViewCam extends Component {
 }
 
 export default ViewCam;
-/* const ViewCam = ({
-    userStore: {
-      state: { id }
-    },
-    viewCamStore: {
-      retrieveAvailableCams,
-      setActiveCam,
-      state: {
-        camList,
-        activeCam
-      }
-    }
-  }) => {
-  
-  } */

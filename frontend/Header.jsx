@@ -38,6 +38,9 @@ class Header extends Component {
         <li>
           <Link to="/ViewCam">View Cams</Link>
         </li>
+        <li>
+          <Link to="/SetCam">Set Cams</Link>
+        </li>
       </ul>
     );
 

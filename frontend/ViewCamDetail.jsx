@@ -1,6 +1,8 @@
 import React from 'react';
 
-const CamDetail = ({ cam: { id, camName, userId, password } }) => (
+// Video, receive streaming, socket.io and webRTC goes here
+
+const ViewCamDetail = ({ cam: { id, camName, userId, password } }) => (
   <div>
     <div>
       <h5>Cam Name: {camName}</h5>
@@ -11,4 +13,4 @@ const CamDetail = ({ cam: { id, camName, userId, password } }) => (
   </div>
 );
 
-export default CamDetail;
+export default ViewCamDetail;

@@ -7,7 +7,8 @@ class SetCamContainer extends Container {
     personalActiveCam: null,
     updateName: '',
     updatePassword: '',
-    allowUser: ''
+    allowUser: '',
+    createNew: false
   };
 
   handleInputChange = e => {
@@ -16,7 +17,7 @@ class SetCamContainer extends Container {
     this.setState(() => input);
   };
 
-  createCam = ({ userId, camName, password }) => {
+  createCam = (userId, camName, password) => {
     axios
       .post(`api/cam/create`, {
         userId,
@@ -28,7 +29,12 @@ class SetCamContainer extends Container {
         this.setActiveCam(response);
       })
       .then(() => {
-        this.createStream(this.state.setActiveCam);
+        this.setState({
+          createNew: false
+        });
+      })
+      .then(() => {
+        this.retrievePersonalCams(userId);
       });
   };
 
@@ -36,10 +42,15 @@ class SetCamContainer extends Container {
     // socket.io and webRTC
   };
 
-  deleteCam = ({ camId, userId }) => {
+  deleteCam = (camId, userId) => {
     axios
       .put(`api/cam/close`, {
         camId
+      })
+      .then(() => {
+        this.setState({
+          personalActiveCam: null
+        });
       })
       .then(() => {
         console.log('cam closed');
@@ -60,6 +71,12 @@ class SetCamContainer extends Container {
   setActiveCam = cam => {
     this.setState({
       personalActiveCam: cam
+    });
+  };
+
+  setCreateCam = () => {
+    this.setState({
+      createNew: true
     });
   };
 

@@ -14,6 +14,23 @@ class SetCamDetail extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.allowCamUser = this.allowCamUser.bind(this);
+    this.gotLocalMediaStream = this.gotLocalMediaStream.bind(this);
+    this.handleLocalMediaStreamError = this.handleLocalMediaStreamError.bind(this);
+    this.setUpStream = this.setUpStream.bind(this);
+  }
+
+  componentDidMount() {
+    this.setUpStream();
+  }
+
+  setUpStream() {
+    const mediaStreamConstraints = {
+      video: true
+    };
+    navigator.mediaDevices
+      .getUserMedia(mediaStreamConstraints)
+      .then(this.gotLocalMediaStream)
+      .catch(this.handleLocalMediaStreamError);
   }
 
   handleInputChange = e => {
@@ -22,13 +39,22 @@ class SetCamDetail extends Component {
     this.setState(() => input);
   };
 
+  handleLocalMediaStreamError(error) {
+    console.log('navigator.getUserMedia error: ', error);
+  }
+
+  gotLocalMediaStream(mediaStream) {
+    const localVideo = document.getElementById('outgoingVideo');
+    localVideo.srcObject = mediaStream;
+  }
+
   allowCamUser() {
-    const camId = this.props.cam.id;
-    const email = this.state.addUser;
+    const { cam: id } = this.props;
+    const { addUser } = this.state;
     axios
       .post(`api/cam/adduser`, {
-        camId,
-        email
+        camId: id,
+        email: addUser
       })
       .then(response => {
         console.log('allowed user access to cam ', response);
@@ -72,6 +98,9 @@ class SetCamDetail extends Component {
           >
             Delete Stream
           </button>
+        </div>
+        <div>
+          <video id="outgoingVideo" ref={el => (this.outgoingVideo = el)} autoPlay />
         </div>
       </div>
     );

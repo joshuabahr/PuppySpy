@@ -10,20 +10,28 @@ class SetCam extends Component {
     this.createNewCam = this.createNewCam.bind(this);
   }
 
-  componentWillMount() {
-    console.log('set cam props !!!!!', this.props);
-  }
-
   componentDidMount() {
     console.log('set cam props ', this.props);
-    this.props.setCamStore.retrievePersonalCams(this.props.userStore.state.id);
+    const {
+      setCamStore: { retrievePersonalCams },
+      userStore: {
+        state: { id }
+      }
+    } = this.props;
+    retrievePersonalCams(id);
   }
 
   createNewCam() {
-    const userId = this.props.userStore.state.id;
-    const camName = this.props.setCamStore.state.updateName;
-    const password = this.props.setCamStore.state.updatePassword;
-    this.props.setCamStore.createCam(userId, camName, password);
+    const {
+      userStore: {
+        state: { id }
+      },
+      setCamStore: {
+        createCam,
+        state: { updateName, updatePassword }
+      }
+    } = this.props;
+    createCam(id, updateName, updatePassword);
   }
 
   render() {

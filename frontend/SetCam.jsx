@@ -38,7 +38,6 @@ class SetCam extends Component {
     const {
       setCamStore: {
         handleInputChange,
-        setActiveCam,
         setCreateCam,
         state: { personalCamList, personalActiveCam, createNew }
       }
@@ -50,9 +49,10 @@ class SetCam extends Component {
 
     if (personalCamList) {
       camListRender = personalCamList.map(cam => (
-        <div onClick={() => setActiveCam(cam)} key={cam.id} role="presentation">
+        <div key={cam.id} role="presentation">
           <li>
             Cam Name: {cam.camName}, Cam ID: {cam.id}
+            <button type="button">delete cam</button>
           </li>
         </div>
       ));

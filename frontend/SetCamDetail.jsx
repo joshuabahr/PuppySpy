@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 // video capture, setup streaming, webRTC and socket.io functionality goes here
 // add user functionality
 // close cam
+
+const socket = io();
+
+const PC_CONFIG = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
+
 class SetCamDetail extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +23,18 @@ class SetCamDetail extends Component {
     this.gotLocalMediaStream = this.gotLocalMediaStream.bind(this);
     this.handleLocalMediaStreamError = this.handleLocalMediaStreamError.bind(this);
     this.setUpStream = this.setUpStream.bind(this);
+    this.handleConnection = this.handleConnection.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
   }
 
   componentDidMount() {
     this.setUpStream();
+    this.handleConnection();
+  }
+
+  componentWillUnmount() {
+    socket.removeAllListeners();
+    this.handleLogOut();
   }
 
   setUpStream() {
@@ -38,6 +52,21 @@ class SetCamDetail extends Component {
     input[e.target.name] = e.target.value;
     this.setState(() => input);
   };
+
+  handleConnection() {
+    const { cam } = this.props;
+    socket.connect();
+    socket.emit('enterstream', cam);
+  }
+
+  handleLogOut() {
+    const {
+      cam,
+      setCamStore: { setActiveCam }
+    } = this.props;
+    socket.emit('leavestream', cam);
+    setActiveCam(null);
+  }
 
   handleLocalMediaStreamError(error) {
     console.log('navigator.getUserMedia error: ', error);

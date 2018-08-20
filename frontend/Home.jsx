@@ -21,29 +21,31 @@ class Home extends Component {
     })
   }
   */
- 
- 
- componentDidMount() {
-   console.log('props ', this.props);
-   auth.getProfile((error, profile) => {
-     if (!profile) {
-       console.log('error in getProfile ', error);
+
+  componentDidMount() {
+    console.log('props ', this.props);
+    auth.getProfile((error, profile) => {
+      if (!profile) {
+        console.log('error in getProfile ', error);
       } else {
         this.registerUser(profile);
       }
     });
   }
-  
+
   registerUser(profile) {
+    const {
+      userStore: { logInUser }
+    } = this.props;
     axios
-    .post(`api/user/signup`, profile)
-    .then(response => {
-      console.log(response.data);
-      this.props.userStore.logInUser(response.data);
-    })
-    .catch(error => {
-      console.log('error in registerUser ', error);
-    });
+      .post(`api/user/signup`, profile)
+      .then(response => {
+        console.log(response.data);
+        logInUser(response.data);
+      })
+      .catch(error => {
+        console.log('error in registerUser ', error);
+      });
   }
 
   logout() {
@@ -51,19 +53,11 @@ class Home extends Component {
   }
 
   render() {
-    const { 
+    const {
       userStore: {
-        logInUser,
-        logOutUser,
-        setPhoneNumber,
-        state: {
-          loggedIn,
-          name,
-          email,
-          phone
-        }
-    }
-  } = this.props
+        state: { name }
+      }
+    } = this.props;
     return (
       <div>
         <h1>This is the Home Page</h1>

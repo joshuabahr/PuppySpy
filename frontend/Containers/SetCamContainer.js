@@ -26,7 +26,7 @@ class SetCamContainer extends Container {
         active: true
       })
       .then(response => {
-        this.setActiveCam(response);
+        this.setActiveCam(response.data);
       })
       .then(() => {
         this.setState({
@@ -36,10 +36,6 @@ class SetCamContainer extends Container {
       .then(() => {
         this.retrievePersonalCams(userId);
       });
-  };
-
-  createStream = cam => {
-    // socket.io and webRTC
   };
 
   deleteCam = (camId, userId) => {

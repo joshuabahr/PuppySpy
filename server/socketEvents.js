@@ -2,18 +2,33 @@ const socketEvents = io => {
   io.on('connect', socket => {
     console.log('socket connected ', socket.connected);
 
-    socket.on('allowaccess', (cam, data) => {
+    socket.on('enterstream', cam => {
+      socket.join(cam.id);
+      console.log('entered stream ', cam);
+      socket.room = cam.id;
+      const room = io.sockets.adapter.rooms[socket.room];
+      console.log('room ', room);
+    });
+
+    socket.on('leavestream', cam => {
+      socket.leave(cam.id);
+      console.log('leaving stream ', cam);
+    });
+
+    socket.on('offer', (cam, details) => {
       socket.join(cam.id);
       socket.room = cam.id;
       const room = io.sockets.adapter.rooms[socket.room];
-      io.sockets.in(cam.id).emit('allowedaccess', data);
+      io.sockets.in(cam.id).emit('offer', details);
+      console.log('offer ', JSON.stringify(details));
     });
 
-    socket.on('requestaccess', (cam, data) => {
+    socket.on('answer', (cam, details) => {
       socket.join(cam.id);
       socket.room = cam.id;
       const room = io.socket.adapter.rooms[socket.room];
-      io.sockets.in(cam.id).emit('requestaccess', data);
+      io.sockets.in(cam.id).emit('answer', details);
+      console.log('answer ', JSON.stringify(details));
     });
 
     socket.on('leavestream', cam => {

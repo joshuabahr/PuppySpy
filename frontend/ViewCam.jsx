@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import ViewCamDetail from './ViewCamDetail';
 
 class ViewCam extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
+    const {
+      viewCamStore: { retrieveAvailableCams },
+      userStore: {
+        state: { id }
+      }
+    } = this.props;
     console.log('View Cam props ', this.props);
-    this.props.viewCamStore.retrieveAvailableCams(this.props.userStore.state.id);
+    retrieveAvailableCams(id);
   }
 
   render() {

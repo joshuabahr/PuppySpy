@@ -55,6 +55,15 @@ class SetCamDetail extends Component {
     this.setState(() => input);
   };
 
+  gotLocalMediaStream(mediaStream) {
+    const localVideo = document.getElementById('localVideo');
+    localVideo.srcObject = mediaStream;
+  }
+
+  handleLocalMediaStreamError(error) {
+    console.log('navigator.getUserMedia error: ', error);
+  }
+
   handleConnection() {
     const { cam } = this.props;
     socket.connect();
@@ -77,15 +86,6 @@ class SetCamDetail extends Component {
     } = this.props;
     socket.emit('leavestream', cam);
     setActiveCam(null);
-  }
-
-  handleLocalMediaStreamError(error) {
-    console.log('navigator.getUserMedia error: ', error);
-  }
-
-  gotLocalMediaStream(mediaStream) {
-    const localVideo = document.getElementById('outgoingVideo');
-    localVideo.srcObject = mediaStream;
   }
 
   allowCamUser() {
@@ -140,7 +140,7 @@ class SetCamDetail extends Component {
           </button>
         </div>
         <div>
-          <video id="outgoingVideo" ref={el => (this.outgoingVideo = el)} autoPlay />
+          <video id="localVideo" ref={this.localVideo} muted autoPlay />
         </div>
       </div>
     );

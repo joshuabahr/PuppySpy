@@ -25,11 +25,13 @@ class SetCamDetail extends Component {
     this.setUpStream = this.setUpStream.bind(this);
     this.handleConnection = this.handleConnection.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
+    this.handleRequestStream = this.handleRequestStream.bind(this);
   }
 
   componentDidMount() {
     this.setUpStream();
     this.handleConnection();
+    this.handleRequestStream();
   }
 
   componentWillUnmount() {
@@ -57,6 +59,15 @@ class SetCamDetail extends Component {
     const { cam } = this.props;
     socket.connect();
     socket.emit('enterstream', cam);
+  }
+
+  handleRequestStream() {
+    const streamInfo = { streamer: 'streamerInfo and SDP' };
+    const { cam } = this.props;
+    socket.on('requeststream', requestInfo => {
+      console.log('user requested access to stream', requestInfo);
+      socket.emit('sendstream', { cam, streamInfo });
+    });
   }
 
   handleLogOut() {

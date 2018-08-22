@@ -10,6 +10,20 @@ const socketEvents = io => {
       console.log('room ', room);
     });
 
+    socket.on('requeststream', data => {
+      const { cam, requestInfo } = data;
+      socket.join(cam.id);
+      console.log('request stream ', requestInfo);
+      socket.room = cam.id;
+      const room = io.sockets.adapter.rooms[socket.room];
+      io.sockets.in(cam.id).emit('requeststream', requestInfo);
+    });
+
+    socket.on('sendstream', data => {
+      const { cam, streamInfo } = data;
+      io.sockets.in(cam.id).emit('sendstream', streamInfo);
+    });
+
     socket.on('leavestream', cam => {
       socket.leave(cam.id);
       console.log('leaving stream ', cam);

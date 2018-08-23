@@ -33,6 +33,10 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: require.resolve('webrtc-adapter'),
+        use: 'expose-loader'
       }
     ]
   }

@@ -18,6 +18,9 @@ class SetCamDetail extends Component {
       addUser: ''
     };
 
+    this.pc = null;
+    this.localStream = null;
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.allowCamUser = this.allowCamUser.bind(this);
     this.gotLocalMediaStream = this.gotLocalMediaStream.bind(this);
@@ -26,6 +29,11 @@ class SetCamDetail extends Component {
     this.handleConnection = this.handleConnection.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
     this.handleRequestStream = this.handleRequestStream.bind(this);
+    this.createPeerConnection = this.createPeerConnection.bind(this);
+    this.handleIceCandidate = this.handleIceCandidate.bind(this);
+    this.handleRemoteStreamAdded = this.handleRemoteStreamAdded.bind(this);
+    this.handleRemoteStreamRemoved = this.handleRemoteStreamRemoved.bind(this);
+    this.newOffer = this.newOffer.bind(this);
   }
 
   componentDidMount() {
@@ -41,11 +49,22 @@ class SetCamDetail extends Component {
 
   setUpStream() {
     const mediaStreamConstraints = {
+      audio: false,
       video: true
     };
     navigator.mediaDevices
       .getUserMedia(mediaStreamConstraints)
       .then(this.gotLocalMediaStream)
+      .then(this.createPeerConnection())
+      .then(() => {
+        this.pc.addStream(this.localStream);
+      })
+      .then(() => {
+        this.newOffer();
+      })
+      .then(() => {
+        console.log('peer connection ', this.pc);
+      })
       .catch(this.handleLocalMediaStreamError);
   }
 
@@ -55,7 +74,49 @@ class SetCamDetail extends Component {
     this.setState(() => input);
   };
 
+  createPeerConnection() {
+    try {
+      this.pc = new RTCPeerConnection(null);
+      this.pc.onicecandidate = this.handleIceCandidate;
+      this.pc.onaddstream = this.handleRemoteStreamAdded;
+      this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      console.log('Created RTCPeerConnection');
+    } catch (e) {
+      console.log('Failed to create PeerConnection, exception: ', e.message);
+    }
+  }
+
+  newOffer() {
+    this.pc.createOffer().then(offer => this.pc.setLocalDescription(offer));
+  }
+
+  handleIceCandidate(event) {
+    console.log('icecandidate event ', event);
+    if (event.candidate) {
+      socket.emit('icecandidate', {
+        type: 'candidate',
+        label: event.candidate.sdpMLineIndex,
+        id: event.candidate.sdpMid,
+        candidate: event.candidate.candidate
+      });
+    } else {
+      console.log('End of Candidates');
+    }
+  }
+
+  handleRemoteStreamAdded(event) {
+    const mediaStream = event.stream;
+    const remoteVideo = document.getElementById('remoteVideo');
+    remoteVideo.srcObject = mediaStream;
+  }
+
+  handleRemoteStreamRemoved(event) {
+    console.log('Remote stream removed ', event);
+  }
+
   gotLocalMediaStream(mediaStream) {
+    console.log('mediaStream ', mediaStream);
+    this.localStream = mediaStream;
     const localVideo = document.getElementById('localVideo');
     localVideo.srcObject = mediaStream;
   }

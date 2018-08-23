@@ -22,6 +22,8 @@ class ViewCamDetail extends Component {
   componentDidMount() {
     this.requestStream();
     this.handleData();
+    this.createPeerConnection();
+    console.log('peer connection !!!! ', this.pc);
   }
 
   createPeerConnection() {

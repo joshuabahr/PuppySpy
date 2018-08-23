@@ -25,13 +25,26 @@ class ViewCam extends Component {
     let activeCamRender;
 
     if (camList) {
-      camListRender = camList.map(cam => (
-        <div onClick={() => setActiveCam(cam)} key={cam.id} role="presentation">
-          <li>
-            Cam Name: {cam.camName}, Cam ID: {cam.id}
-          </li>
-        </div>
-      ));
+      camListRender = camList.map(cam => {
+        let viewCamButton;
+        if (!activeCam) {
+          viewCamButton = (
+            <button type="button" onClick={() => setActiveCam(cam)}>
+              View Stream
+            </button>
+          );
+        } else {
+          viewCamButton = null;
+        }
+        return (
+          <div key={cam.id}>
+            <li>
+              Cam Name: {cam.camName}, Cam ID: {cam.id}
+              {viewCamButton}
+            </li>
+          </div>
+        );
+      });
     } else {
       camListRender = <h4>No available cams</h4>;
     }

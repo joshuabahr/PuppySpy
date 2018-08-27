@@ -4,45 +4,54 @@ import io from 'socket.io-client';
 const socket = io();
 
 const PC_CONFIG = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
-let pc = null;
+/* let pc = null;
 let localStream = null;
 const mediaStreamConstraints = {
   audio: false,
   video: { width: 640, height: 480 }
 };
-
+ */
 class PeerConnectionContainer extends Container {
+  pc = null;
+
+  localStream = null;
+
+  mediaStreamConstraints = {
+    audio: false,
+    video: { width: 640, height: 480 }
+  };
+
   setUpStream = () => {
-    console.log('media constraints ', mediaStreamConstraints);
+    console.log('media constraints ', this.mediaStreamConstraints);
     navigator.mediaDevices
-      .getUserMedia(mediaStreamConstraints)
+      .getUserMedia(this.mediaStreamConstraints)
       .then(this.gotLocalMediaStream)
       .then(this.createPeerConnection())
       .then(() => {
-        pc.addStream(localStream);
+        this.pc.addStream(this.localStream);
       })
       .then(() => {
         this.newOffer();
       })
       .then(() => {
-        console.log('peer connection ', pc);
+        console.log('peer connection ', this.pc);
       })
       .catch(this.handleLocalMediaStreamError);
   };
 
   gotLocalMediaStream = mediaStream => {
     console.log('mediaStream ', mediaStream);
-    localStream = mediaStream;
+    this.localStream = mediaStream;
     const localVideo = document.getElementById('localVideo');
     localVideo.srcObject = mediaStream;
   };
 
   createPeerConnection = () => {
     try {
-      pc = new RTCPeerConnection(PC_CONFIG);
-      pc.onicecandidate = this.handleIceCandidate;
-      pc.onaddstream = this.handleRemoteStreamAdded;
-      pc.onremovestream = this.handleRemoteStreamRemoved;
+      this.pc = new RTCPeerConnection(PC_CONFIG);
+      this.pc.onicecandidate = this.handleIceCandidate;
+      this.pc.onaddstream = this.handleRemoteStreamAdded;
+      this.pc.onremovestream = this.handleRemoteStreamRemoved;
       console.log('Created RTCPeerConnection');
     } catch (e) {
       console.log('Failed to create PeerConnection, exception: ', e.message);
@@ -78,7 +87,7 @@ class PeerConnectionContainer extends Container {
   };
 
   newOffer = () => {
-    pc.createOffer().then(offer => pc.setLocalDescription(offer));
+    this.pc.createOffer().then(offer => this.pc.setLocalDescription(offer));
 
     // then send localDescription through server to other client
   };

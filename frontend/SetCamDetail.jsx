@@ -88,6 +88,8 @@ class SetCamDetail extends Component {
 
   newOffer() {
     this.pc.createOffer().then(offer => this.pc.setLocalDescription(offer));
+
+    // then send localDescription through server to other client
   }
 
   handleIceCandidate(event) {

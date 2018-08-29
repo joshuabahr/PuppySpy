@@ -13,54 +13,35 @@ class ViewCamDetail extends Component {
 
     this.requestStream = this.requestStream.bind(this);
     this.handleData = this.handleData.bind(this);
-    this.createPeerConnection = this.createPeerConnection.bind(this);
-    this.handleIceCandidate = this.handleIceCandidate.bind(this);
-    this.handleRemoteStreamAdded = this.handleRemoteStreamAdded.bind(this);
-    this.handleRemoteStreamRemoved = this.handleRemoteStreamRemoved.bind(this);
+    this.handleNewIceCandidate = this.handleNewIceCandidate.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
   }
 
   componentDidMount() {
+    const {
+      peerConnectionStore: { setUpRecipient }
+    } = this.props;
+    setUpRecipient();
     this.requestStream();
     this.handleData();
-    this.createPeerConnection();
+    this.handleNewIceCandidate();
     console.log('peer connection !!!! ', this.pc);
   }
 
-  createPeerConnection() {
-    try {
-      this.pc = new RTCPeerConnection(null);
-      this.pc.onicecandidate = this.handleIceCandidate;
-      this.pc.onaddstream = this.handleRemoteStreamAdded;
-      this.pc.onremovestream = this.handleRemoteStreamRemoved;
-      console.log('Created RTCPeerConnection');
-    } catch (e) {
-      console.log('Failed to create PeerConnection, exception: ', e.message);
-    }
+  componentWillUnmount() {
+    socket.removeAllListeners();
+    this.handleLogOut();
   }
 
-  handleIceCandidate(event) {
-    console.log('icecandidate event ', event);
-    if (event.candidate) {
-      socket.emit('icecandidate', {
-        type: 'candidate',
-        label: event.candidate.sdpMLineIndex,
-        id: event.candidate.sdpMid,
-        candidate: event.candidate.candidate
-      });
-    } else {
-      console.log('End of Candidates');
-    }
-  }
-
-  handleRemoteStreamAdded(event) {
-    const mediaStream = event.stream;
-    const remoteVideo = document.getElementById('remoteVideo');
-    remoteVideo.srcObject = mediaStream;
-  }
-
-  handleRemoteStreamRemoved(event) {
-    console.log('Remote stream removed ', event);
-  }
+  setCurrentCam = () => {
+    const {
+      peerConnectionStore: { setCam },
+      viewCamStore: {
+        state: { activeCam }
+      }
+    } = this.props;
+    setCam(activeCam);
+  };
 
   requestStream() {
     const { cam } = this.props;
@@ -73,6 +54,23 @@ class ViewCamDetail extends Component {
     socket.on('sendstream', streamInfo => {
       console.log('received data from other user ', streamInfo);
     });
+  }
+
+  handleNewIceCandidate() {
+    socket.on('icecandidate', iceInfo => {
+      console.log('new ice candidate ', iceInfo);
+    });
+  }
+
+  handleLogOut() {
+    const {
+      viewCamStore: {
+        setActiveCam,
+        state: { activeCam }
+      }
+    } = this.props;
+    socket.emit('leavestream', activeCam);
+    setActiveCam(null);
   }
 
   render() {

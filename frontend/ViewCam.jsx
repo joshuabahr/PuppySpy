@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 import ViewCamDetail from './ViewCamDetail';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
+import ViewCamContainer from './Containers/ViewCamContainer';
 
 class ViewCam extends Component {
   componentDidMount() {
@@ -53,8 +54,10 @@ class ViewCam extends Component {
 
     if (activeCam) {
       activeCamRender = (
-        <Subscribe to={[PeerConnectionContainer]}>
-          {peerConnectionStore => <ViewCamDetail peerConnectionStore={peerConnectionStore} cam={activeCam} />}
+        <Subscribe to={[ViewCamContainer, PeerConnectionContainer]}>
+          {(viewCamStore, peerConnectionStore) => (
+            <ViewCamDetail viewCamStore={viewCamStore} peerConnectionStore={peerConnectionStore} cam={activeCam} />
+          )}
         </Subscribe>
       );
     } else {

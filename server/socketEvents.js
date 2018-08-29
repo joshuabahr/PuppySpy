@@ -61,6 +61,12 @@ const socketEvents = io => {
       io.sockets.in(cam.id).emit('streamclosed');
     });
 
+    socket.on('icecandidate', data => {
+      console.log('icecandidate data ', data);
+      io.sockets.in(data.cam.id).emit('icecandidate', data);
+      console.log('icecandidate ', data);
+    });
+
     socket.on('disconnect', () => {
       console.log('socket disconnected ', socket.connected);
     });

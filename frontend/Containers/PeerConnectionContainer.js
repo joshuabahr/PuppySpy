@@ -4,14 +4,10 @@ import io from 'socket.io-client';
 const socket = io();
 
 const PC_CONFIG = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
-/* let pc = null;
-let localStream = null;
-const mediaStreamConstraints = {
-  audio: false,
-  video: { width: 640, height: 480 }
-};
- */
+
 class PeerConnectionContainer extends Container {
+  cam = null;
+
   pc = null;
 
   localStream = null;
@@ -19,6 +15,10 @@ class PeerConnectionContainer extends Container {
   mediaStreamConstraints = {
     audio: false,
     video: { width: 640, height: 480 }
+  };
+
+  setCam = cam => {
+    this.cam = cam;
   };
 
   setUpStream = () => {
@@ -37,6 +37,13 @@ class PeerConnectionContainer extends Container {
         console.log('peer connection ', this.pc);
       })
       .catch(this.handleLocalMediaStreamError);
+  };
+
+  setUpRecipient = () => {
+    console.log('recipient setting up');
+    this.createPeerConnection();
+    this.newOffer({ offerToReceiveVideo: true });
+    console.log('recipient pc ', this.pc);
   };
 
   gotLocalMediaStream = mediaStream => {
@@ -65,7 +72,8 @@ class PeerConnectionContainer extends Container {
         type: 'candidate',
         label: event.candidate.sdpMLineIndex,
         id: event.candidate.sdpMid,
-        candidate: event.candidate.candidate
+        candidate: event.candidate.candidate,
+        cam: this.cam
       });
     } else {
       console.log('End of Candidates');
@@ -86,8 +94,8 @@ class PeerConnectionContainer extends Container {
     console.log('navigator.getUserMedia error: ', error);
   };
 
-  newOffer = () => {
-    this.pc.createOffer().then(offer => this.pc.setLocalDescription(offer));
+  newOffer = options => {
+    this.pc.createOffer(options).then(offer => this.pc.setLocalDescription(offer));
 
     // then send localDescription through server to other client
   };

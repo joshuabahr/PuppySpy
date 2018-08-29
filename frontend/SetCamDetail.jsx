@@ -21,13 +21,14 @@ class SetCamDetail extends Component {
     this.handleConnection = this.handleConnection.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
     this.handleRequestStream = this.handleRequestStream.bind(this);
+    this.setCurrentCam = this.setCurrentCam.bind(this);
   }
 
   componentDidMount() {
-    console.log('props props ', this.props);
     const {
       peerConnectionStore: { setUpStream }
     } = this.props;
+    this.setCurrentCam();
     setUpStream();
     this.handleConnection();
     this.handleRequestStream();
@@ -37,6 +38,14 @@ class SetCamDetail extends Component {
     socket.removeAllListeners();
     this.handleLogOut();
   }
+
+  setCurrentCam = () => {
+    const {
+      cam,
+      peerConnectionStore: { setCam }
+    } = this.props;
+    setCam(cam);
+  };
 
   handleInputChange = e => {
     const input = {};

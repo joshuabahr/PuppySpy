@@ -24,8 +24,6 @@ class ViewCamContainer extends Container {
   setActiveCam = cam => {
     this.setState({
       activeCam: cam
-    }).then(() => {
-      console.log('active cam state', this.state);
     });
   };
 

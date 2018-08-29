@@ -23,81 +23,78 @@ const handleAuthentication = ({ location }) => {
   }
 };
 
-const Main = () => {
-  console.log('Main props ');
-  return (
-    <main>
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={props => (auth.isAuthenticated() ? <Redirect to="/Home" {...props} /> : <Landing />)}
-        />
-        <Route
-          path="/callback"
-          render={props => {
-            handleAuthentication(props);
-            return <Callback {...props} />;
-          }}
-        />
-        <Route
-          exact
-          path="/Profile"
-          render={props =>
-            !auth.isAuthenticated() ? (
-              <Redirect to="/" />
-            ) : (
-              <Subscribe to={[UserContainer]}>{userStore => <Profile userStore={userStore} {...props} />}</Subscribe>
-            )
-          }
-        />
-        <Route
-          exact
-          path="/Home"
-          render={props =>
-            !auth.isAuthenticated() ? (
-              <Redirect to="/" />
-            ) : (
-              <Subscribe to={[UserContainer]}>
-                {userStore => <Home auth={auth} userStore={userStore} {...props} />}
-              </Subscribe>
-            )
-          }
-        />
-        <Route
-          exact
-          path="/SetCam"
-          render={props =>
-            !auth.isAuthenticated() ? (
-              <Redirect to="/" />
-            ) : (
-              <Subscribe to={[UserContainer, SetCamContainer]}>
-                {(userStore, setCamStore) => (
-                  <SetCam auth={auth} userStore={userStore} setCamStore={setCamStore} {...props} />
-                )}
-              </Subscribe>
-            )
-          }
-        />
-        <Route
-          exact
-          path="/ViewCam"
-          render={props =>
-            !auth.isAuthenticated() ? (
-              <Redirect to="/" />
-            ) : (
-              <Subscribe to={[UserContainer, ViewCamContainer]}>
-                {(userStore, viewCamStore) => (
-                  <ViewCam auth={auth} viewCamStore={viewCamStore} userStore={userStore} {...props} />
-                )}
-              </Subscribe>
-            )
-          }
-        />
-        <Route component={Missing} />
-      </Switch>
-    </main>
-  );
-};
+const Main = () => (
+  <main>
+    <Switch>
+      <Route
+        exact
+        path="/"
+        render={props => (auth.isAuthenticated() ? <Redirect to="/Home" {...props} /> : <Landing />)}
+      />
+      <Route
+        path="/callback"
+        render={props => {
+          handleAuthentication(props);
+          return <Callback {...props} />;
+        }}
+      />
+      <Route
+        exact
+        path="/Profile"
+        render={props =>
+          !auth.isAuthenticated() ? (
+            <Redirect to="/" />
+          ) : (
+            <Subscribe to={[UserContainer]}>{userStore => <Profile userStore={userStore} {...props} />}</Subscribe>
+          )
+        }
+      />
+      <Route
+        exact
+        path="/Home"
+        render={props =>
+          !auth.isAuthenticated() ? (
+            <Redirect to="/" />
+          ) : (
+            <Subscribe to={[UserContainer]}>
+              {userStore => <Home auth={auth} userStore={userStore} {...props} />}
+            </Subscribe>
+          )
+        }
+      />
+      <Route
+        exact
+        path="/SetCam"
+        render={props =>
+          !auth.isAuthenticated() ? (
+            <Redirect to="/" />
+          ) : (
+            <Subscribe to={[UserContainer, SetCamContainer]}>
+              {(userStore, setCamStore) => (
+                <SetCam auth={auth} userStore={userStore} setCamStore={setCamStore} {...props} />
+              )}
+            </Subscribe>
+          )
+        }
+      />
+      <Route
+        exact
+        path="/ViewCam"
+        render={props =>
+          !auth.isAuthenticated() ? (
+            <Redirect to="/" />
+          ) : (
+            <Subscribe to={[UserContainer, ViewCamContainer]}>
+              {(userStore, viewCamStore) => (
+                <ViewCam auth={auth} viewCamStore={viewCamStore} userStore={userStore} {...props} />
+              )}
+            </Subscribe>
+          )
+        }
+      />
+      <Route component={Missing} />
+    </Switch>
+  </main>
+);
 
 export default Main;

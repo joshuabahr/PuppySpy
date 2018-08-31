@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
 
-// video capture, setup streaming, webRTC and socket.io functionality goes here
-// add user functionality
-// close cam
-
-const socket = io();
+// TODO: Close cam function, forces any open peer connections to close
 
 class SetCamDetail extends Component {
   constructor(props) {
@@ -18,25 +13,21 @@ class SetCamDetail extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.allowCamUser = this.allowCamUser.bind(this);
-    this.handleConnection = this.handleConnection.bind(this);
-    this.handleLogOut = this.handleLogOut.bind(this);
-    this.handleRequestStream = this.handleRequestStream.bind(this);
+    this.logOut = this.logOut.bind(this);
     this.setCurrentCam = this.setCurrentCam.bind(this);
   }
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpStream }
+      peerConnectionStore: { setUpStream, setAndSendStreamDescription }
     } = this.props;
     this.setCurrentCam();
     setUpStream();
-    this.handleConnection();
-    this.handleRequestStream();
+    setAndSendStreamDescription();
   }
 
   componentWillUnmount() {
-    socket.removeAllListeners();
-    this.handleLogOut();
+    this.logOut();
   }
 
   setCurrentCam = () => {
@@ -53,27 +44,13 @@ class SetCamDetail extends Component {
     this.setState(() => input);
   };
 
-  handleConnection() {
-    const { cam } = this.props;
-    socket.connect();
-    socket.emit('enterstream', cam);
-  }
-
-  handleRequestStream() {
-    const streamInfo = { streamer: 'streamerInfo and SDP' };
-    const { cam } = this.props;
-    socket.on('requeststream', requestInfo => {
-      console.log('user requested access to stream', requestInfo);
-      socket.emit('sendstream', { cam, streamInfo });
-    });
-  }
-
-  handleLogOut() {
+  logOut() {
     const {
       cam,
+      peerConnectionStore: { handleLogOut },
       setCamStore: { setActiveCam }
     } = this.props;
-    socket.emit('leavestream', cam);
+    handleLogOut(cam);
     setActiveCam(null);
   }
 

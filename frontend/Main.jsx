@@ -23,6 +23,8 @@ const handleAuthentication = ({ location }) => {
   }
 };
 
+// if !userStore.state.id Redirect to "/Home" for Profile, SetCam and ViewCam
+
 const Main = () => (
   <main>
     <Switch>

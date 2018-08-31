@@ -10,18 +10,6 @@ class Home extends Component {
     this.logout = this.logout.bind(this);
   }
 
-  /*
-  static fetchProfile(profile) {
-    axios.get(`api/user/profile/${profile.id}`)
-    .then((response) => {
-      console.log('fetched user profile ', response.data);
-    })
-    .catch((error) => {
-      console.log('error in fetchProfile ', error);
-    })
-  }
-  */
-
   componentDidMount() {
     console.log('props ', this.props);
     auth.getProfile((error, profile) => {

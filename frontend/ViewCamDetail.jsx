@@ -1,36 +1,26 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
 
-// Video, receive streaming, socket.io and webRTC goes here
-
-const socket = io();
+// TODO: add 'View Another Stream' button, sets currentCam to null
 
 class ViewCamDetail extends Component {
   constructor(props) {
     super(props);
 
-    this.pc = null;
-
-    this.requestStream = this.requestStream.bind(this);
-    this.handleData = this.handleData.bind(this);
-    this.handleNewIceCandidate = this.handleNewIceCandidate.bind(this);
-    this.handleLogOut = this.handleLogOut.bind(this);
+    this.logOut = this.logOut.bind(this);
+    this.setCurrentCam = this.setCurrentCam.bind(this);
   }
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpRecipient }
+      peerConnectionStore: { setUpRecipient, setStreamerDescription }
     } = this.props;
+    this.setCurrentCam();
     setUpRecipient();
-    this.requestStream();
-    this.handleData();
-    this.handleNewIceCandidate();
-    console.log('peer connection !!!! ', this.pc);
+    setStreamerDescription();
   }
 
   componentWillUnmount() {
-    socket.removeAllListeners();
-    this.handleLogOut();
+    this.logOut();
   }
 
   setCurrentCam = () => {
@@ -43,33 +33,15 @@ class ViewCamDetail extends Component {
     setCam(activeCam);
   };
 
-  requestStream() {
-    const { cam } = this.props;
-    const requestInfo = { requester: 'requestInfo and SDP' };
-    socket.connect();
-    socket.emit('requeststream', { cam, requestInfo });
-  }
-
-  handleData() {
-    socket.on('sendstream', streamInfo => {
-      console.log('received data from other user ', streamInfo);
-    });
-  }
-
-  handleNewIceCandidate() {
-    socket.on('icecandidate', iceInfo => {
-      console.log('new ice candidate ', iceInfo);
-    });
-  }
-
-  handleLogOut() {
+  logOut() {
     const {
+      peerConnectionStore: { handleLogOut },
       viewCamStore: {
         setActiveCam,
         state: { activeCam }
       }
     } = this.props;
-    socket.emit('leavestream', activeCam);
+    handleLogOut(activeCam);
     setActiveCam(null);
   }
 

@@ -5,6 +5,8 @@ import Main from './Main';
 import Footer from './Footer';
 import UserContainer from './Containers/UserContainer';
 
+// Main subscribe to UserContainer
+
 const App = () => (
   <div>
     <Subscribe to={[UserContainer]}>

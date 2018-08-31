@@ -2,7 +2,7 @@ const socketEvents = io => {
   io.on('connect', socket => {
     console.log('socket connected ', socket.connected);
 
-    socket.on('enterstream', cam => {
+    socket.on('enterroom', cam => {
       socket.join(cam.id);
       console.log('entered stream ', cam);
       socket.room = cam.id;
@@ -10,43 +10,19 @@ const socketEvents = io => {
       console.log('room ', room);
     });
 
-    socket.on('requeststream', data => {
-      const { cam, requestInfo } = data;
-      socket.join(cam.id);
-      console.log('request stream ', requestInfo);
-      socket.room = cam.id;
-      const room = io.sockets.adapter.rooms[socket.room];
-      io.sockets.in(cam.id).emit('requeststream', requestInfo);
-    });
-
-    socket.on('sendstream', data => {
-      const { cam, streamInfo } = data;
-      io.sockets.in(cam.id).emit('sendstream', streamInfo);
-    });
-
     socket.on('leavestream', cam => {
       socket.leave(cam.id);
       console.log('leaving stream ', cam);
     });
 
-    socket.on('offer', (cam, details) => {
-      socket.join(cam.id);
-      socket.room = cam.id;
-      const room = io.sockets.adapter.rooms[socket.room];
-      io.sockets.in(cam.id).emit('offer', details);
-      console.log('offer ', JSON.stringify(details));
+    socket.on('streamerdescription', details => {
+      io.sockets.in(details.cam.id).emit('streamerdescription', details.sdp);
+      console.log('streamer description ', details.cam.id);
     });
 
-    socket.on('answer', (cam, details) => {
-      socket.join(cam.id);
-      socket.room = cam.id;
-      const room = io.socket.adapter.rooms[socket.room];
-      io.sockets.in(cam.id).emit('answer', details);
-      console.log('answer ', JSON.stringify(details));
-    });
-
-    socket.on('leavestream', cam => {
-      socket.leave(cam.id);
+    socket.on('recipientdescription', details => {
+      io.sockets.in(details.cam.id).emit('recipientdescription', details.sdp);
+      console.log('recipient description ', details.cam.id);
     });
 
     socket.on('closestream', cam => {
@@ -59,12 +35,6 @@ const socketEvents = io => {
           });
         });
       io.sockets.in(cam.id).emit('streamclosed');
-    });
-
-    socket.on('icecandidate', data => {
-      console.log('icecandidate data ', data);
-      io.sockets.in(data.cam.id).emit('icecandidate', data);
-      console.log('icecandidate ', data);
     });
 
     socket.on('disconnect', () => {

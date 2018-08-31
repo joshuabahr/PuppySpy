@@ -19,6 +19,8 @@ class PeerConnectionContainer extends Container {
 
   setCam = cam => {
     this.cam = cam;
+    socket.connect();
+    socket.emit('enterroom', cam);
   };
 
   setUpStream = () => {
@@ -28,26 +30,47 @@ class PeerConnectionContainer extends Container {
       .then(this.gotLocalMediaStream)
       .then(this.createPeerConnection())
       .then(() => {
-        this.pc.addStream(this.localStream);
-      })
-      .then(() => {
-        this.newOffer();
-      })
-      .then(() => {
-        console.log('peer connection ', this.pc);
+        console.log('streamer pc ', this.pc);
       })
       .catch(this.handleLocalMediaStreamError);
   };
 
+  setAndSendStreamDescription = () => {
+    socket.on('recipientdescription', sdp => {
+      this.pc
+        .setRemoteDescription(sdp)
+        .then(() => {
+          this.pc.addStream(this.localStream);
+        })
+        .then(() => this.pc.createAnswer())
+        .then(answer => {
+          this.pc.setLocalDescription(answer);
+        })
+        .then(() => {
+          console.log('streamer PC ', this.pc);
+          this.sendStreamerDescription();
+        })
+        .catch(error => {
+          console.log('error creating answer ', error);
+        });
+    });
+  };
+
   setUpRecipient = () => {
-    console.log('recipient setting up');
+    console.log('recipient setting up ', this.cam);
     this.createPeerConnection();
-    this.newOffer({ offerToReceiveVideo: true });
-    console.log('recipient pc ', this.pc);
+    this.pc
+      .createOffer({ offerToReceiveVideo: true })
+      .then(offer => {
+        this.pc.setLocalDescription(offer);
+      })
+      .then(() => {
+        console.log('sending recipient description ', this.pc);
+        this.sendRecipientDescription();
+      });
   };
 
   gotLocalMediaStream = mediaStream => {
-    console.log('mediaStream ', mediaStream);
     this.localStream = mediaStream;
     const localVideo = document.getElementById('localVideo');
     localVideo.srcObject = mediaStream;
@@ -57,8 +80,8 @@ class PeerConnectionContainer extends Container {
     try {
       this.pc = new RTCPeerConnection(PC_CONFIG);
       this.pc.onicecandidate = this.handleIceCandidate;
-      this.pc.onaddstream = this.handleRemoteStreamAdded;
-      this.pc.onremovestream = this.handleRemoteStreamRemoved;
+      this.pc.ontrack = this.handleRemoteStreamAdded;
+      this.pc.onremovetrack = this.handleRemoteStreamRemoved;
       console.log('Created RTCPeerConnection');
     } catch (e) {
       console.log('Failed to create PeerConnection, exception: ', e.message);
@@ -81,7 +104,8 @@ class PeerConnectionContainer extends Container {
   };
 
   handleRemoteStreamAdded = event => {
-    const mediaStream = event.stream;
+    console.log('track added !!!! ', event.streams[0]);
+    const mediaStream = event.streams[0];
     const remoteVideo = document.getElementById('remoteVideo');
     remoteVideo.srcObject = mediaStream;
   };
@@ -94,10 +118,35 @@ class PeerConnectionContainer extends Container {
     console.log('navigator.getUserMedia error: ', error);
   };
 
-  newOffer = options => {
-    this.pc.createOffer(options).then(offer => this.pc.setLocalDescription(offer));
+  sendStreamerDescription = () => {
+    socket.emit('streamerdescription', {
+      cam: this.cam,
+      sdp: this.pc.localDescription
+    });
+  };
 
-    // then send localDescription through server to other client
+  sendRecipientDescription = () => {
+    socket.emit('recipientdescription', {
+      cam: this.cam,
+      sdp: this.pc.localDescription
+    });
+  };
+
+  setStreamerDescription = () => {
+    socket.on('streamerdescription', sdp => {
+      this.pc.setRemoteDescription(sdp).then(() => {
+        console.log('streamer description added ', this.pc);
+      });
+    });
+  };
+
+  handleLogOut = cam => {
+    socket.emit('leavestream', cam);
+    socket.removeAllListeners();
+    this.pc.close();
+    this.pc = null;
+    this.cam = null;
+    console.log('pc is closed ', this.pc, this.cam);
   };
 }
 

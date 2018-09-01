@@ -6,7 +6,7 @@ module.exports = {
   context: __dirname,
   entry: [
     'react-hot-loader/patch',
-    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     'webpack/hot/only-dev-server',
     './frontend/ClientApp.jsx'
   ],
@@ -23,10 +23,7 @@ module.exports = {
     reasons: true,
     chunks: true
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NamedModulesPlugin()],
   module: {
     rules: [
       {

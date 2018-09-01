@@ -10,13 +10,15 @@ import UserContainer from './Containers/UserContainer';
 const App = () => (
   <div>
     <Subscribe to={[UserContainer]}>
-      {(userStore) => (
-        <Header userStore={userStore}/>
+      {userStore => (
+        <div>
+          <Header userStore={userStore} />
+          <Main userStore={userStore} />
+        </div>
       )}
     </Subscribe>
-    <Main />
     <Footer />
   </div>
-)
+);
 
 export default App;

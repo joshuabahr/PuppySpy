@@ -4,22 +4,16 @@ const Profile = ({
   userStore: {
     handleInputChange,
     updateUserPhone,
-    state: {
-      name,
-      email,
-      phone,
-      updatePhone
-    }
+    state: { name, email, phone, updatePhone }
   }
 }) => {
   let phoneNo;
 
   if (!phone) {
-    phoneNo = 'N/A'
+    phoneNo = 'N/A';
   } else {
-    phoneNo = phone
+    phoneNo = phone;
   }
-
 
   return (
     <div>
@@ -27,12 +21,15 @@ const Profile = ({
         <li>E-mail: {email}</li>
         <li>Name: {name}</li>
         <li>Phone: {phoneNo}</li>
-        <li><input type='number' value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
-          <button type="button" onClick={() => updateUserPhone(updatePhone)}>click to update phone</button>
+        <li>
+          <input type="number" value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
+          <button type="button" onClick={() => updateUserPhone(updatePhone)}>
+            click to update phone
+          </button>
         </li>
       </ul>
     </div>
-  )
+  );
 };
 
 export default Profile;

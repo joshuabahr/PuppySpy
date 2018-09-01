@@ -7,11 +7,12 @@ const auth = new Auth();
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.logout = this.logout.bind(this);
+
+    this.registerUser = this.registerUser.bind(this);
   }
 
   componentDidMount() {
-    console.log('props ', this.props);
+    console.log('Home props ', this.props);
     auth.getProfile((error, profile) => {
       if (!profile) {
         console.log('error in getProfile ', error);
@@ -34,10 +35,6 @@ class Home extends Component {
       .catch(error => {
         console.log('error in registerUser ', error);
       });
-  }
-
-  logout() {
-    auth.logout();
   }
 
   render() {

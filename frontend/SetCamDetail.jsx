@@ -106,7 +106,7 @@ class SetCamDetail extends Component {
           </button>
         </div>
         <div>
-          <video id="localVideo" ref={this.localVideo} muted autoPlay />
+          <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
         </div>
       </div>
     );

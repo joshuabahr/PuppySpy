@@ -59,7 +59,7 @@ class ViewCamDetail extends Component {
         <div>User ID: {userId}</div>
         <div>Password: {password}</div>
         <div>
-          <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay />
+          <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
         </div>
       </div>
     );

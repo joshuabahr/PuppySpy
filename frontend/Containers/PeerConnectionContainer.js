@@ -44,6 +44,7 @@ class PeerConnectionContainer extends Container {
         })
         .then(() => this.pc.createAnswer())
         .then(answer => {
+          console.log('answer ', answer);
           this.pc.setLocalDescription(answer);
         })
         .then(() => {

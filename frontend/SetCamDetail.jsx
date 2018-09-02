@@ -19,11 +19,12 @@ class SetCamDetail extends Component {
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpStream, setAndSendStreamDescription }
+      peerConnectionStore: { setUpStream, setAndSendStreamDescription, handleNewIce }
     } = this.props;
     this.setCurrentCam();
     setUpStream();
     setAndSendStreamDescription();
+    handleNewIce();
   }
 
   componentWillUnmount() {

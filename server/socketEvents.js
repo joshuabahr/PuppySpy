@@ -25,6 +25,10 @@ const socketEvents = io => {
       console.log('recipient description ', details.cam.id);
     });
 
+    socket.on('icecandidate', details => {
+      io.sockets.in(details.cam.id).emit('newice', details);
+    });
+
     socket.on('closestream', cam => {
       io.of('/')
         .in(cam.id)

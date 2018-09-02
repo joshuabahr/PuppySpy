@@ -8,7 +8,8 @@ module.exports = {
     'react-hot-loader/patch',
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     'webpack/hot/only-dev-server',
-    './frontend/ClientApp.jsx'
+    './frontend/ClientApp.jsx',
+    'webrtc-adapter'
   ],
   devtool: 'cheap-eval-source-map',
   output: {
@@ -30,10 +31,6 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      },
-      {
-        test: require.resolve('webrtc-adapter'),
-        use: 'expose-loader'
       }
     ]
   }

@@ -28,15 +28,13 @@ class PeerConnectionContainer extends Container {
     navigator.mediaDevices
       .getUserMedia(this.mediaStreamConstraints)
       .then(this.gotLocalMediaStream)
-      .then(this.createPeerConnection())
-      .then(() => {
-        console.log('streamer pc ', this.pc);
-      })
       .catch(this.handleLocalMediaStreamError);
   };
 
   setAndSendStreamDescription = () => {
     socket.on('recipientdescription', sdp => {
+      this.createPeerConnection();
+      console.log('setting recipient description');
       this.pc
         .setRemoteDescription(sdp)
         .then(() => {
@@ -83,6 +81,7 @@ class PeerConnectionContainer extends Container {
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.ontrack = this.handleRemoteStreamAdded;
       this.pc.onremovetrack = this.handleRemoteStreamRemoved;
+      this.pc.oniceconnectionstatechange = this.handleIceStateChange;
       console.log('Created RTCPeerConnection');
     } catch (e) {
       console.log('Failed to create PeerConnection, exception: ', e.message);
@@ -104,15 +103,28 @@ class PeerConnectionContainer extends Container {
     }
   };
 
-  handleRemoteStreamAdded = event => {
-    console.log('track added !!!! ', event.streams[0]);
-    const mediaStream = event.streams[0];
+  handleNewIce = () => {
+    socket.on('newice', details => {
+      console.log('new ice candidate ', details);
+      this.pc.addIceCandidate(details).catch(e => console.log('failure to add ice candidate ', e.name));
+    });
+  };
+
+  handleIceStateChange = () => {
+    console.log('Ice state change ', this.pc.iceConnectionState);
+  };
+
+  handleRemoteStreamAdded = e => {
+    const mediaStream = e.streams[0];
     const remoteVideo = document.getElementById('remoteVideo');
     remoteVideo.srcObject = mediaStream;
+    console.log('track running ', remoteVideo.srcObject);
   };
 
   handleRemoteStreamRemoved = event => {
     console.log('Remote stream removed ', event);
+    const remoteVideo = document.getElementById('remoteVideo');
+    remoteVideo.srcObject = null;
   };
 
   handleLocalMediaStreamError = error => {
@@ -120,6 +132,7 @@ class PeerConnectionContainer extends Container {
   };
 
   sendStreamerDescription = () => {
+    console.log('sending streamer description');
     socket.emit('streamerdescription', {
       cam: this.cam,
       sdp: this.pc.localDescription
@@ -127,6 +140,7 @@ class PeerConnectionContainer extends Container {
   };
 
   sendRecipientDescription = () => {
+    console.log('sending recipient description');
     socket.emit('recipientdescription', {
       cam: this.cam,
       sdp: this.pc.localDescription

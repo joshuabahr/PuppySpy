@@ -12,11 +12,12 @@ class ViewCamDetail extends Component {
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpRecipient, setStreamerDescription }
+      peerConnectionStore: { setUpRecipient, setStreamerDescription, handleNewIce }
     } = this.props;
     this.setCurrentCam();
     setUpRecipient();
     setStreamerDescription();
+    handleNewIce();
   }
 
   componentWillUnmount() {

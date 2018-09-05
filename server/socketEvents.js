@@ -5,8 +5,7 @@ const socketEvents = io => {
     socket.on('enterroom', cam => {
       socket.join(cam.id);
       console.log('entered stream ', cam);
-      socket.room = cam.id;
-      const room = io.sockets.adapter.rooms[socket.room];
+      const room = io.sockets.adapter.rooms[cam.id];
       console.log('room ', room);
     });
 

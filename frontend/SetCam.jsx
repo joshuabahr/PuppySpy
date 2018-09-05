@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 import SetCamContainer from './Containers/SetCamContainer';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
+import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
 class SetCam extends Component {
@@ -64,9 +65,14 @@ class SetCam extends Component {
 
     if (personalActiveCam) {
       activeCamRender = (
-        <Subscribe to={[SetCamContainer, PeerConnectionContainer]}>
-          {(setCamStore, peerConnectionStore) => (
-            <SetCamDetail cam={personalActiveCam} setCamStore={setCamStore} peerConnectionStore={peerConnectionStore} />
+        <Subscribe to={[SetCamContainer, PeerConnectionContainer, MotionDetectionContainer]}>
+          {(setCamStore, peerConnectionStore, motionDetectionStore) => (
+            <SetCamDetail
+              cam={personalActiveCam}
+              setCamStore={setCamStore}
+              peerConnectionStore={peerConnectionStore}
+              motionDetectionStore={motionDetectionStore}
+            />
           )}
         </Subscribe>
       );

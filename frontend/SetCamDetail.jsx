@@ -76,7 +76,8 @@ class SetCamDetail extends Component {
   render() {
     const {
       cam: { id, camName, userId, password },
-      setCamStore: { deleteCam }
+      setCamStore: { deleteCam },
+      motionDetectionStore: { getLocalStream }
     } = this.props;
 
     const { addUser } = this.state;
@@ -104,6 +105,19 @@ class SetCamDetail extends Component {
             }}
           >
             Delete Stream
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              const {
+                peerConnectionStore: { localStream }
+              } = this.props;
+              getLocalStream(localStream);
+            }}
+          >
+            Motion Detection
           </button>
         </div>
         <div>

@@ -28,6 +28,9 @@ class PeerConnectionContainer extends Container {
     navigator.mediaDevices
       .getUserMedia(this.mediaStreamConstraints)
       .then(this.gotLocalMediaStream)
+      .then(() => {
+        console.log('setUpStream localStream ', this.localStream);
+      })
       .catch(this.handleLocalMediaStreamError);
   };
 

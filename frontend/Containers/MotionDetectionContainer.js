@@ -10,10 +10,6 @@ class MotionDetectionContainer extends Container {
 
   video = document.createElement('video');
 
-  motionCanvas = document.createElement('canvas');
-
-  captureCanvas = document.createElement('canvas');
-
   diffCanvas = document.createElement('canvas');
 
   captureIntervalTime = 1000;
@@ -34,11 +30,7 @@ class MotionDetectionContainer extends Container {
 
   isReadyToDiff = false;
 
-  captureContext = null;
-
   diffContext = null;
-
-  motionContext = null;
 
   getLocalStream = stream => {
     if (stream) {
@@ -51,10 +43,6 @@ class MotionDetectionContainer extends Container {
     this.diffCanvas.width = this.diffWidth;
     this.diffCanvas.height = this.diffHeight;
     this.diffContext = this.diffCanvas.getContext('2d');
-
-    this.motionCanvas.width = this.diffWidth;
-    this.motionCanvas.height = this.diffHeight;
-    this.motionContext = this.motionCanvas.getContext('2d');
 
     this.video.srcObject = this.captureStream;
     console.log('MotionDetection set up ', this);
@@ -71,8 +59,6 @@ class MotionDetectionContainer extends Container {
       const diff = this.processDiff(diffImageData);
 
       console.log('diff value ', diff);
-
-      this.motionContext.putImageData(diffImageData, 0, 0);
 
       if (diff >= this.scoreThreshold) {
         this.motionDetection();

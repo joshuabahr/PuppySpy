@@ -158,6 +158,13 @@ class PeerConnectionContainer extends Container {
     });
   };
 
+  handleStreamClose = cam => {
+    socket.emit('leavestream', cam);
+    socket.removeAllListeners();
+    this.cam = null;
+    console.log('stream is closed');
+  };
+
   handleLogOut = cam => {
     socket.emit('leavestream', cam);
     socket.removeAllListeners();

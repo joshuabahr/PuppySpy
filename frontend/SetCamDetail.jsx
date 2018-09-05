@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 // TODO: Close cam function, forces any open peer connections to close
+// BUGS: logout doesn't work, doesn't end capture upon leaving page
 
 class SetCamDetail extends Component {
   constructor(props) {
@@ -28,7 +29,16 @@ class SetCamDetail extends Component {
   }
 
   componentWillUnmount() {
+    const {
+      motionDetectionStore: {
+        stopMotionDetection,
+        state: { motionDetectionActive }
+      }
+    } = this.props;
     this.logOut();
+    if (motionDetectionActive) {
+      stopMotionDetection();
+    }
   }
 
   setCurrentCam = () => {
@@ -48,10 +58,14 @@ class SetCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { handleLogOut },
+      peerConnectionStore: { pc, handleStreamClose, handleLogOut },
       setCamStore: { setActiveCam }
     } = this.props;
-    handleLogOut(cam);
+    if (!pc) {
+      handleStreamClose(cam);
+    } else {
+      handleLogOut(cam);
+    }
     setActiveCam(null);
   }
 
@@ -77,13 +91,24 @@ class SetCamDetail extends Component {
     const {
       cam: { id, camName, userId, password },
       setCamStore: { deleteCam },
-      motionDetectionStore: { getLocalStream }
+      motionDetectionStore: {
+        state: { motionDetected }
+      }
     } = this.props;
+
+    let motion;
+
+    if (motionDetected) {
+      motion = <h1>MOTION DETECTED</h1>;
+    } else {
+      motion = null;
+    }
 
     const { addUser } = this.state;
 
     return (
       <div>
+        <div>{motion}</div>
         <div>
           <h5>Cam Name: {camName}</h5>
         </div>
@@ -112,9 +137,11 @@ class SetCamDetail extends Component {
             type="button"
             onClick={() => {
               const {
-                peerConnectionStore: { localStream }
+                peerConnectionStore: { localStream },
+                motionDetectionStore: { getLocalStream }
               } = this.props;
               getLocalStream(localStream);
+              console.log('click props ', this.props);
             }}
           >
             Motion Detection

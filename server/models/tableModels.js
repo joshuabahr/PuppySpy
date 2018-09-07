@@ -4,14 +4,14 @@ const db = require('../db/db');
 const User = db.define('user', {
   name: Sequelize.STRING,
   email: Sequelize.STRING,
-  phone: Sequelize.INTEGER
+  phone: Sequelize.STRING
 });
 
 const Cam = db.define('cam', {
   camName: Sequelize.STRING,
   active: Sequelize.BOOLEAN,
   password: Sequelize.STRING
-})
+});
 
 const User_Cam = db.define('user_cam', {
   id: {
@@ -19,7 +19,7 @@ const User_Cam = db.define('user_cam', {
     primaryKey: true,
     autoIncrement: true
   }
-})
+});
 
 User.hasMany(Cam);
 Cam.belongsTo(User);

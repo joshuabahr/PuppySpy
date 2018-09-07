@@ -22,7 +22,7 @@ const Profile = ({
         <li>Name: {name}</li>
         <li>Phone: {phoneNo}</li>
         <li>
-          <input type="number" value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
+          <input type="text" value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
           <button type="button" onClick={() => updateUserPhone(updatePhone)}>
             click to update phone
           </button>

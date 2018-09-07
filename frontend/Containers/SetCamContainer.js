@@ -1,6 +1,8 @@
 import { Container } from 'unstated';
 import axios from 'axios';
 
+// BUGS: deleteCam not working
+
 class SetCamContainer extends Container {
   state = {
     personalCamList: null,
@@ -58,9 +60,11 @@ class SetCamContainer extends Container {
     console.log('retrieve personal cams running ');
     axios.get(`api/cam/personal/${userId}`).then(response => {
       console.log('retrieving cams ', response);
-      this.setState({
-        personalCamList: response.data[0].cams
-      });
+      if (response.data.length > 0) {
+        this.setState({
+          personalCamList: response.data[0].cams
+        });
+      }
     });
   };
 

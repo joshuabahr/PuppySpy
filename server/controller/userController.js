@@ -25,15 +25,15 @@ const signupUser = (req, res) => {
 };
 
 const editUserProfile = (req, res) => {
-  console.log('edit user profile ', req.body)
+  console.log('edit user profile ', req.body);
   Table.User.update(
     {
       phone: req.body.phone
     },
     {
-      where: { id: req.params.userId },
-      returning: true,
-      plain: true
+      where: { id: req.params.userId }
+      // returning: true,
+      // plain: true
     }
   )
     .then(response => res.status(200).send(response[1].dataValues))

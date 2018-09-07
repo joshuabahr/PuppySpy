@@ -1,4 +1,5 @@
 import { Container } from 'unstated';
+import axios from 'axios';
 
 class MotionDetectionContainer extends Container {
   state = {
@@ -32,7 +33,13 @@ class MotionDetectionContainer extends Container {
 
   diffContext = null;
 
-  getLocalStream = stream => {
+  cooldownTimer = 60000;
+
+  userPhoneNo = null;
+
+  cam = null;
+
+  getLocalStream = (stream, phoneNo, camName) => {
     if (stream) {
       this.captureStream = stream;
     }
@@ -43,6 +50,9 @@ class MotionDetectionContainer extends Container {
     this.diffCanvas.width = this.diffWidth;
     this.diffCanvas.height = this.diffHeight;
     this.diffContext = this.diffCanvas.getContext('2d');
+
+    this.userPhoneNo = phoneNo;
+    this.cam = camName;
 
     this.video.srcObject = this.captureStream;
     console.log('MotionDetection set up ', this);
@@ -98,7 +108,7 @@ class MotionDetectionContainer extends Container {
       if (this.state.motionDetectionActive) {
         this.getLocalStream();
       }
-    }, 5000);
+    }, this.cooldownTimer);
   };
 
   setMotionDetectionActive = () => {
@@ -111,6 +121,16 @@ class MotionDetectionContainer extends Container {
     this.setState({ motionDetectionActive: false }).then(() => {
       console.log('stop motion detection ', this.state.motionDetectionActive);
     });
+  };
+
+  sendSMSAlert = () => {
+    axios
+      .post(`cam/alert`, {
+        phone: this.userPhoneNo,
+        cam: this.cam
+      })
+      .then(response => console.log('alert sent ', response))
+      .catch(error => console.log('error sending alert ', error));
   };
 }
 

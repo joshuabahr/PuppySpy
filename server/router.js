@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const userController = require('./controller/userController');
 const camController = require('./controller/camController');
+const twilioController = require('./controller/twilioController');
 
 // User profile routing
 router.post('/user/signup', userController.signupUser);
@@ -16,5 +17,8 @@ router.put('/cam/name', camController.updateCamName);
 router.put('/cam/password', camController.updateCamPassword);
 router.post('/cam/adduser', camController.addAllowedCam);
 router.put('/cam/close', camController.closeCam);
+
+// Twilio routing
+router.post('/cam/alert', twilioController.sendSMSAlert);
 
 module.exports = router;

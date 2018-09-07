@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 // TODO: Close cam function, forces any open peer connections to close
-// BUGS: logout doesn't work, doesn't end capture upon leaving page
 
 class SetCamDetail extends Component {
   constructor(props) {
@@ -22,6 +21,7 @@ class SetCamDetail extends Component {
     const {
       peerConnectionStore: { setUpStream, setAndSendStreamDescription, handleNewIce }
     } = this.props;
+    console.log('set cam detail props ', this.props);
     this.setCurrentCam();
     setUpStream();
     setAndSendStreamDescription();
@@ -84,7 +84,8 @@ class SetCamDetail extends Component {
         this.setState({
           addUser: ''
         });
-      });
+      })
+      .catch(error => console.log('error allowing user access ', error));
   }
 
   render() {
@@ -137,11 +138,13 @@ class SetCamDetail extends Component {
             type="button"
             onClick={() => {
               const {
+                userStore: {
+                  state: { phone }
+                },
                 peerConnectionStore: { localStream },
                 motionDetectionStore: { getLocalStream }
               } = this.props;
-              getLocalStream(localStream);
-              console.log('click props ', this.props);
+              getLocalStream(localStream, phone, camName);
             }}
           >
             Motion Detection

@@ -1,6 +1,8 @@
 import { Container } from 'unstated';
 import io from 'socket.io-client';
 
+// TODO: Add socket.emit('closestream') and socket.on('closestream');
+
 const socket = io();
 
 const PC_CONFIG = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };

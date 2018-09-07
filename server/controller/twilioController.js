@@ -11,7 +11,7 @@ const sendSMSAlert = (req, res) => {
 
   client.messages
     .create({
-      body: `Motion detected on stream ${streamName}`,
+      body: `Motion detected on stream: '${streamName}'`,
       from: config.twilioNo,
       to: userNo
     })

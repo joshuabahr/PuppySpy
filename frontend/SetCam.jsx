@@ -6,6 +6,8 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
+// TODO: Remove <li onClick></li>
+
 class SetCam extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +45,11 @@ class SetCam extends Component {
         handleInputChange,
         setCreateCam,
         setActiveCam,
+        deleteCam,
         state: { personalCamList, personalActiveCam, createNew }
+      },
+      userStore: {
+        state: { id }
       }
     } = this.props;
 
@@ -53,11 +59,17 @@ class SetCam extends Component {
 
     if (personalCamList) {
       camListRender = personalCamList.map(cam => (
-        <div key={cam.id} onClick={() => setActiveCam(cam)} role="presentation">
-          <li>
-            Cam Name: {cam.camName}, Cam ID: {cam.id}
-            <button type="button">delete cam</button>
-          </li>
+        <div key={cam.id}>
+          <div onClick={() => setActiveCam(cam)} role="presentation">
+            <li>
+              Cam Name: {cam.camName}, Cam ID: {cam.id}
+            </li>
+          </div>
+          <div>
+            <button type="button" onClick={() => deleteCam(cam.id, id)}>
+              delete cam
+            </button>
+          </div>
         </div>
       ));
     } else {
@@ -95,7 +107,7 @@ class SetCam extends Component {
               }}
             />
           </div>
-          <div>
+          {/* <div>
             <h5>Stream password:</h5>
             <input
               type="text"
@@ -104,7 +116,7 @@ class SetCam extends Component {
                 handleInputChange(e);
               }}
             />
-          </div>
+          </div> */}
           <div>
             <button type="button" onClick={this.createNewCam}>
               Add New Stream
@@ -112,6 +124,8 @@ class SetCam extends Component {
           </div>
         </div>
       );
+    } else if (personalActiveCam) {
+      newCam = null;
     } else {
       newCam = (
         <button type="button" onClick={() => setCreateCam()}>

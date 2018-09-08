@@ -6,7 +6,7 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
-// TODO: Remove <li onClick></li>
+// TODO: Add remoteClose functionality
 
 class SetCam extends Component {
   constructor(props) {
@@ -44,13 +44,13 @@ class SetCam extends Component {
       setCamStore: {
         handleInputChange,
         setCreateCam,
-        setActiveCam,
         deleteCam,
         state: { personalCamList, personalActiveCam, createNew }
       },
       userStore: {
         state: { id }
-      }
+      },
+      peerConnectionStore: { remoteCloseStream }
     } = this.props;
 
     let camListRender;
@@ -60,16 +60,18 @@ class SetCam extends Component {
     if (personalCamList) {
       camListRender = personalCamList.map(cam => (
         <div key={cam.id}>
-          <div onClick={() => setActiveCam(cam)} role="presentation">
-            <li>
-              Cam Name: {cam.camName}, Cam ID: {cam.id}
-            </li>
-          </div>
-          <div>
-            <button type="button" onClick={() => deleteCam(cam.id, id)}>
+          <li>
+            Cam Name: {cam.camName}, Cam ID: {cam.id}
+            <button
+              type="button"
+              onClick={() => {
+                remoteCloseStream(cam);
+                deleteCam(cam.id, id);
+              }}
+            >
               delete cam
             </button>
-          </div>
+          </li>
         </div>
       ));
     } else {
@@ -107,16 +109,6 @@ class SetCam extends Component {
               }}
             />
           </div>
-          {/* <div>
-            <h5>Stream password:</h5>
-            <input
-              type="text"
-              name="updatePassword"
-              onChange={e => {
-                handleInputChange(e);
-              }}
-            />
-          </div> */}
           <div>
             <button type="button" onClick={this.createNewCam}>
               Add New Stream

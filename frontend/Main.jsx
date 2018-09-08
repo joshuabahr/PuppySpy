@@ -9,6 +9,7 @@ import SetCam from './SetCam';
 import ViewCam from './ViewCam';
 import SetCamContainer from './Containers/SetCamContainer';
 import ViewCamContainer from './Containers/ViewCamContainer';
+import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 
 const auth = new Auth();
 
@@ -64,8 +65,16 @@ const Main = ({ userStore }) => {
             !auth.isAuthenticated() || !userStore.state.id ? (
               <Redirect to="/" />
             ) : (
-              <Subscribe to={[SetCamContainer]}>
-                {setCamStore => <SetCam auth={auth} userStore={userStore} setCamStore={setCamStore} {...props} />}
+              <Subscribe to={[SetCamContainer, PeerConnectionContainer]}>
+                {(setCamStore, peerConnectionStore) => (
+                  <SetCam
+                    auth={auth}
+                    userStore={userStore}
+                    setCamStore={setCamStore}
+                    peerConnectionStore={peerConnectionStore}
+                    {...props}
+                  />
+                )}
               </Subscribe>
             )
           }

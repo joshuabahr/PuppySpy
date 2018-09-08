@@ -14,18 +14,19 @@ class SetCamDetail extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.allowCamUser = this.allowCamUser.bind(this);
     this.logOut = this.logOut.bind(this);
-    this.setCurrentCam = this.setCurrentCam.bind(this);
   }
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpStream, setAndSendStreamDescription, handleNewIce }
+      cam,
+      peerConnectionStore: { setCam, setUpStream, setAndSendStreamDescription, handleNewIce, handleRemoteCloseStream }
     } = this.props;
     console.log('set cam detail props ', this.props);
-    this.setCurrentCam();
+    setCam(cam);
     setUpStream();
     setAndSendStreamDescription();
     handleNewIce();
+    handleRemoteCloseStream();
   }
 
   componentWillUnmount() {
@@ -41,14 +42,6 @@ class SetCamDetail extends Component {
     }
   }
 
-  setCurrentCam = () => {
-    const {
-      cam,
-      peerConnectionStore: { setCam }
-    } = this.props;
-    setCam(cam);
-  };
-
   handleInputChange = e => {
     const input = {};
     input[e.target.name] = e.target.value;
@@ -58,7 +51,7 @@ class SetCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { pc, handleStreamClose, handleLogOut },
+      peerConnectionStore: { pc, handleStreamClose, handleLogOut, remoteClosedFalse },
       setCamStore: { setActiveCam }
     } = this.props;
     if (!pc) {
@@ -67,6 +60,7 @@ class SetCamDetail extends Component {
       handleLogOut(cam);
     }
     setActiveCam(null);
+    remoteClosedFalse();
   }
 
   allowCamUser() {
@@ -92,24 +86,44 @@ class SetCamDetail extends Component {
     const {
       cam: { id, camName, userId, password },
       setCamStore: { deleteCam },
+      peerConnectionStore: {
+        state: { remoteClosed }
+      },
       motionDetectionStore: {
         state: { motionDetected }
       }
     } = this.props;
 
     let motion;
+    let videoOrClosed = (
+      <div>
+        <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
+      </div>
+    );
 
     if (motionDetected) {
-      motion = <h1>MOTION DETECTED</h1>;
+      motion = (
+        <div>
+          <h1>MOTION DETECTED</h1>
+        </div>
+      );
     } else {
       motion = null;
+    }
+
+    if (remoteClosed) {
+      videoOrClosed = (
+        <div>
+          <h1>Stream closed remotely</h1>
+        </div>
+      );
     }
 
     const { addUser } = this.state;
 
     return (
       <div>
-        <div>{motion}</div>
+        {motion}
         <div>
           <h5>Cam Name: {camName}</h5>
         </div>
@@ -150,9 +164,7 @@ class SetCamDetail extends Component {
             Motion Detection
           </button>
         </div>
-        <div>
-          <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
-        </div>
+        {videoOrClosed}
       </div>
     );
   }

@@ -28,6 +28,11 @@ const socketEvents = io => {
       io.sockets.in(details.cam.id).emit('newice', details);
     });
 
+    socket.on('remoteclosestream', cam => {
+      io.sockets.in(cam.id).emit('remoteclosestream');
+      console.log('stream remotely closed ', cam);
+    });
+
     socket.on('closestream', cam => {
       io.of('/')
         .in(cam.id)

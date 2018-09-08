@@ -19,6 +19,10 @@ class PeerConnectionContainer extends Container {
     video: { width: 640, height: 480 }
   };
 
+  state = {
+    remoteClosed: false
+  };
+
   setCam = cam => {
     this.cam = cam;
     socket.connect();
@@ -174,6 +178,33 @@ class PeerConnectionContainer extends Container {
     this.pc = null;
     this.cam = null;
     console.log('pc is closed ', this.pc, this.cam);
+  };
+
+  remoteCloseStream = cam => {
+    socket.connect();
+    socket.emit('enterroom', cam);
+    socket.emit('remoteclosestream', cam);
+    socket.emit('leavestream', cam);
+  };
+
+  handleRemoteCloseStream = () => {
+    socket.on('remoteclosestream', () => {
+      console.log('stream closed remotely');
+      socket.emit('leavestream', this.cam);
+      socket.removeAllListeners();
+      if (this.pc) {
+        this.pc.close();
+        this.pc = null;
+      }
+      this.cam = null;
+      this.setState({ remoteClosed: true });
+    });
+  };
+
+  remoteClosedFalse = () => {
+    this.setState({
+      remoteClosed: false
+    });
   };
 }
 

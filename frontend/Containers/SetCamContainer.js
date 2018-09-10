@@ -60,7 +60,11 @@ class SetCamContainer extends Container {
     console.log('retrieve personal cams running ');
     axios.get(`api/cam/personal/${userId}`).then(response => {
       console.log('retrieving cams ', response);
-      if (response.data.length > 0) {
+      if (response.data.length === 0) {
+        this.setState({
+          personalCamList: null
+        });
+      } else {
         this.setState({
           personalCamList: response.data[0].cams
         });

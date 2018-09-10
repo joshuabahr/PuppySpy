@@ -3,31 +3,17 @@ const Table = require('../models/tableModels');
 const existed = { status: 'already exists' };
 
 const createCam = (req, res) => {
-  Table.Cam.findOrCreate({
-    where: {
-      camName: req.body.camName,
-      password: req.body.password,
-      userId: req.body.userId,
-      active: req.body.active
-    }
+  Table.Cam.create({
+    camName: req.body.camName,
+    password: req.body.password,
+    userId: req.body.userId,
+    active: req.body.active
   })
-  .spread((response, isCreated) => {
-    if (isCreated) {
-      Table.User_Cam.findOrCreate({
-        where: {
-          userId: req.body.userId,
-          camId: response.id
-        }
-      })
+    .then(response => {
       res.status(201).send(response);
-    } else {
-      res.send(existed);
-    }
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+    })
+    .catch(error => res.send(error));
+};
 
 const fetchActiveUserCams = (req, res) => {
   Table.User_Cam.findAll({
@@ -36,17 +22,17 @@ const fetchActiveUserCams = (req, res) => {
     },
     include: [
       {
-        model: Table.Cam, 
+        model: Table.Cam,
         where: { active: true }
       }
     ]
   })
-  .then((response) => {
-    res.status(200).send(response);
-  })
-  .catch((error) => {
-    res.send(error);
-  });
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.send(error);
+    });
 };
 
 const fetchAllUserCams = (req, res) => {
@@ -60,12 +46,12 @@ const fetchAllUserCams = (req, res) => {
       }
     ]
   })
-  .then((response) => {
-    res.status(200).send(response);
-  })
-  .catch((error) => {
-    res.send(error);
-  });
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.send(error);
+    });
 };
 
 const fetchPersonalCams = (req, res) => {
@@ -77,37 +63,43 @@ const fetchPersonalCams = (req, res) => {
       }
     ]
   })
-  .then((response) => {
-    res.status(200).send(response);
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.send(error);
+    });
+};
 
 const updateCamName = (req, res) => {
-  Table.Cam.update({
-    camName: req.body.camName
-  }, { where: { id: req.body.camId }})
-  .then(() => {
-    res.status(201).send('successfully updated cam name ');
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+  Table.Cam.update(
+    {
+      camName: req.body.camName
+    },
+    { where: { id: req.body.camId } }
+  )
+    .then(() => {
+      res.status(201).send('successfully updated cam name ');
+    })
+    .catch(error => {
+      res.send(error);
+    });
+};
 
 const updateCamPassword = (req, res) => {
-  Table.Cam.update({
-    password: req.body.password
-  }, { where: { id: req.body.camId }})
-  .then(() => {
-    res.status(201).send('updated cam password');
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+  Table.Cam.update(
+    {
+      password: req.body.password
+    },
+    { where: { id: req.body.camId } }
+  )
+    .then(() => {
+      res.status(201).send('updated cam password');
+    })
+    .catch(error => {
+      res.send(error);
+    });
+};
 
 const addAllowedCam = (req, res) => {
   let user_Id;
@@ -117,39 +109,50 @@ const addAllowedCam = (req, res) => {
       email: req.body.email
     }
   })
-  .then((user) => {
-    user_Id = user.dataValues.id;
-  })
-  .then(() => {
-    Table.User_Cam.findOrCreate({
-      where: {
-        camId: cam_Id,
-        userId: user_Id
-      }
+    .then(user => {
+      user_Id = user.dataValues.id;
     })
-    .spread((response, isCreated) => {
-      if (isCreated) {
-        res.status(201).send(response);
-      } else {
-        res.send(existed);
-      }
+    .then(() => {
+      Table.User_Cam.findOrCreate({
+        where: {
+          camId: cam_Id,
+          userId: user_Id
+        }
+      }).spread((response, isCreated) => {
+        if (isCreated) {
+          res.status(201).send(response);
+        } else {
+          res.send(existed);
+        }
+      });
     })
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+    .catch(error => {
+      res.send(error);
+    });
+};
 
 const closeCam = (req, res) => {
-  Table.Cam.update({
-    active: false
-  }, { where: { id: req.body.camId }})
-  .then(() => {
-    res.status(201).send('cam closed');
-  })
-  .catch((error) => {
-    res.send(error);
-  })
-}
+  Table.Cam.update(
+    {
+      active: false
+    },
+    { where: { id: req.body.camId } }
+  )
+    .then(() => {
+      res.status(201).send('cam closed');
+    })
+    .catch(error => {
+      res.send(error);
+    });
+};
 
-module.exports = { createCam, fetchAllUserCams, fetchPersonalCams, fetchActiveUserCams, updateCamName, updateCamPassword, addAllowedCam, closeCam };
+module.exports = {
+  createCam,
+  fetchAllUserCams,
+  fetchPersonalCams,
+  fetchActiveUserCams,
+  updateCamName,
+  updateCamPassword,
+  addAllowedCam,
+  closeCam
+};

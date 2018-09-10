@@ -94,6 +94,14 @@ class SetCamContainer extends Container {
         console.log('allowed user access to cam ', response);
       });
   };
+
+  reloadAfterRemoteClose = userId => {
+    this.setState({
+      personalActiveCam: null
+    }).then(() => {
+      this.retrievePersonalCams(userId);
+    });
+  };
 }
 
 export default SetCamContainer;

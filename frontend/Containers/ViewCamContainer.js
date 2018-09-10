@@ -18,7 +18,8 @@ class ViewCamContainer extends Container {
         this.setState({
           camList: cams
         });
-      });
+      })
+      .catch(error => console.log('error retrieving available cams ', error));
   };
 
   setActiveCam = cam => {
@@ -28,6 +29,14 @@ class ViewCamContainer extends Container {
   };
 
   formatCams = cams => cams.map(cam => cam.cam);
+
+  reloadAvailableStreams = userId => {
+    this.setState({
+      activeCam: null
+    }).then(() => {
+      this.retrieveAvailableCams(userId);
+    });
+  };
 }
 
 export default ViewCamContainer;

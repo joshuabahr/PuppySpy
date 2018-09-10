@@ -51,7 +51,7 @@ class SetCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { pc, handleStreamClose, handleLogOut, remoteClosedFalse },
+      peerConnectionStore: { pc, handleStreamClose, handleLogOut, streamClosedFalse },
       setCamStore: { setActiveCam }
     } = this.props;
     if (!pc) {
@@ -60,7 +60,7 @@ class SetCamDetail extends Component {
       handleLogOut(cam);
     }
     setActiveCam(null);
-    remoteClosedFalse();
+    streamClosedFalse();
   }
 
   allowCamUser() {
@@ -85,9 +85,9 @@ class SetCamDetail extends Component {
   render() {
     const {
       cam: { id, camName, userId, password },
-      setCamStore: { deleteCam },
+      setCamStore: { deleteCam, reloadAfterRemoteClose },
       peerConnectionStore: {
-        state: { remoteClosed }
+        state: { streamClosed }
       },
       motionDetectionStore: {
         state: { motionDetected }
@@ -111,10 +111,18 @@ class SetCamDetail extends Component {
       motion = null;
     }
 
-    if (remoteClosed) {
+    if (streamClosed) {
       videoOrClosed = (
         <div>
           <h1>Stream closed remotely</h1>
+          <button
+            type="button"
+            onClick={() => {
+              reloadAfterRemoteClose(userId);
+            }}
+          >
+            Start another stream
+          </button>
         </div>
       );
     }

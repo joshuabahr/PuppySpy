@@ -12,12 +12,13 @@ class ViewCamDetail extends Component {
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpRecipient, setStreamerDescription, handleNewIce }
+      peerConnectionStore: { setUpRecipient, setStreamerDescription, handleNewIce, handleRemoteCloseStream }
     } = this.props;
     this.setCurrentCam();
     setUpRecipient();
     setStreamerDescription();
     handleNewIce();
+    handleRemoteCloseStream();
   }
 
   componentWillUnmount() {
@@ -48,8 +49,26 @@ class ViewCamDetail extends Component {
 
   render() {
     const {
-      cam: { id, camName, userId, password }
+      cam: { id, camName, userId, password },
+      peerConnectionStore: {
+        state: { streamClosed }
+      }
     } = this.props;
+
+    let videoOrClosed = (
+      <div>
+        <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
+      </div>
+    );
+
+    if (streamClosed) {
+      videoOrClosed = (
+        <div>
+          <h1>Stream has been closed</h1>
+          <button type="button">View Another Stream</button>
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -59,9 +78,7 @@ class ViewCamDetail extends Component {
         <div>Cam ID: {id}</div>
         <div>User ID: {userId}</div>
         <div>Password: {password}</div>
-        <div>
-          <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
-        </div>
+        {videoOrClosed}
       </div>
     );
   }

@@ -20,7 +20,7 @@ class PeerConnectionContainer extends Container {
   };
 
   state = {
-    remoteClosed: false
+    streamClosed: false
   };
 
   setCam = cam => {
@@ -197,13 +197,13 @@ class PeerConnectionContainer extends Container {
         this.pc = null;
       }
       this.cam = null;
-      this.setState({ remoteClosed: true });
+      this.setState({ streamClosed: true });
     });
   };
 
-  remoteClosedFalse = () => {
+  streamClosedFalse = () => {
     this.setState({
-      remoteClosed: false
+      streamClosed: false
     });
   };
 }

@@ -10,6 +10,12 @@ const createCam = (req, res) => {
     active: req.body.active
   })
     .then(response => {
+      Table.User_Cam.findOrCreate({
+        where: {
+          userId: req.body.userId,
+          camId: response.id
+        }
+      });
       res.status(201).send(response);
     })
     .catch(error => res.send(error));

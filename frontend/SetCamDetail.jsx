@@ -51,8 +51,8 @@ class SetCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { pc, handleStreamClose, handleLogOut, streamClosedFalse },
-      setCamStore: { setActiveCam }
+      peerConnectionStore: { pc, handleStreamClose, handleLogOut, streamClosedFalse, remoteCloseStream },
+      setCamStore: { setActiveCam, deleteCam }
     } = this.props;
     if (!pc) {
       handleStreamClose(cam);
@@ -61,6 +61,8 @@ class SetCamDetail extends Component {
     }
     setActiveCam(null);
     streamClosedFalse();
+    remoteCloseStream(cam);
+    deleteCam(cam.id, cam.userId);
   }
 
   allowCamUser() {
@@ -84,9 +86,10 @@ class SetCamDetail extends Component {
 
   render() {
     const {
-      cam: { id, camName, userId, password },
+      cam,
       setCamStore: { deleteCam, reloadAfterRemoteClose },
       peerConnectionStore: {
+        remoteCloseStream,
         state: { streamClosed }
       },
       motionDetectionStore: {
@@ -118,7 +121,7 @@ class SetCamDetail extends Component {
           <button
             type="button"
             onClick={() => {
-              reloadAfterRemoteClose(userId);
+              reloadAfterRemoteClose(cam.userId);
             }}
           >
             Start another stream
@@ -133,11 +136,8 @@ class SetCamDetail extends Component {
       <div>
         {motion}
         <div>
-          <h5>Cam Name: {camName}</h5>
+          <h5>Stream Name: {cam.camName}</h5>
         </div>
-        <div>Cam ID: {id}</div>
-        <div>User ID: {userId}</div>
-        <div>Password: {password}</div>
         <div>
           allow user access (email):
           <input type="text" name="addUser" onChange={this.handleInputChange} value={addUser} />
@@ -149,10 +149,11 @@ class SetCamDetail extends Component {
           <button
             type="button"
             onClick={() => {
-              deleteCam(id, userId);
+              remoteCloseStream(cam);
+              deleteCam(cam.id, cam.userId);
             }}
           >
-            Delete Stream
+            End Stream
           </button>
         </div>
         <div>
@@ -166,10 +167,10 @@ class SetCamDetail extends Component {
                 peerConnectionStore: { localStream },
                 motionDetectionStore: { getLocalStream }
               } = this.props;
-              getLocalStream(localStream, phone, camName);
+              getLocalStream(localStream, phone, cam.camName);
             }}
           >
-            Motion Detection
+            Set Motion Detection
           </button>
         </div>
         {videoOrClosed}

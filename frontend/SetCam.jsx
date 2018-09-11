@@ -69,13 +69,13 @@ class SetCam extends Component {
                 deleteCam(cam.id, id);
               }}
             >
-              delete cam
+              End Stream
             </button>
           </li>
         </div>
       ));
     } else {
-      camListRender = <h4>No available cams</h4>;
+      camListRender = <h4>No active streams</h4>;
     }
 
     if (personalActiveCam) {
@@ -93,7 +93,7 @@ class SetCam extends Component {
         </Subscribe>
       );
     } else {
-      activeCamRender = <h4>No active cam</h4>;
+      activeCamRender = <h4>No active stream</h4>;
     }
 
     if (createNew) {

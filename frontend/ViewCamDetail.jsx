@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-// TODO: add 'View Another Stream' button, sets currentCam to null
-
 class ViewCamDetail extends Component {
   constructor(props) {
     super(props);
@@ -37,27 +35,39 @@ class ViewCamDetail extends Component {
 
   logOut() {
     const {
+      cam,
       peerConnectionStore: { handleLogOut },
-      viewCamStore: {
-        setActiveCam,
-        state: { activeCam }
-      }
+      viewCamStore: { setActiveCam }
     } = this.props;
-    handleLogOut(activeCam);
+    console.log('logout props ', this.props);
+    handleLogOut(cam);
     setActiveCam(null);
   }
 
   render() {
     const {
-      cam: { id, camName, userId, password },
+      cam,
+      userStore: {
+        state: { id }
+      },
       peerConnectionStore: {
         state: { streamClosed }
-      }
+      },
+      viewCamStore: { reloadAvailableStreams, setActiveCam }
     } = this.props;
 
     let videoOrClosed = (
       <div>
         <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
+        <button
+          type="button"
+          onClick={() => {
+            setActiveCam(null);
+            reloadAvailableStreams(id);
+          }}
+        >
+          View another stream
+        </button>
       </div>
     );
 
@@ -65,7 +75,9 @@ class ViewCamDetail extends Component {
       videoOrClosed = (
         <div>
           <h1>Stream has been closed</h1>
-          <button type="button">View Another Stream</button>
+          <button type="button" onClick={() => reloadAvailableStreams(id)}>
+            View Another Stream
+          </button>
         </div>
       );
     }
@@ -73,11 +85,8 @@ class ViewCamDetail extends Component {
     return (
       <div>
         <div>
-          <h5>Cam Name: {camName}</h5>
+          <h5>Stream Name: {cam.camName}</h5>
         </div>
-        <div>Cam ID: {id}</div>
-        <div>User ID: {userId}</div>
-        <div>Password: {password}</div>
         {videoOrClosed}
       </div>
     );

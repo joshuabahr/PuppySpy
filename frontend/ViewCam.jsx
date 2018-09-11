@@ -21,7 +21,8 @@ class ViewCam extends Component {
       viewCamStore: {
         setActiveCam,
         state: { camList, activeCam }
-      }
+      },
+      userStore
     } = this.props;
 
     let camListRender;
@@ -42,7 +43,7 @@ class ViewCam extends Component {
         return (
           <div key={cam.id}>
             <li>
-              Cam Name: {cam.camName}, Cam ID: {cam.id}
+              Stream Name: {cam.camName}
               {viewCamButton}
             </li>
           </div>
@@ -56,16 +57,22 @@ class ViewCam extends Component {
       activeCamRender = (
         <Subscribe to={[ViewCamContainer, PeerConnectionContainer]}>
           {(viewCamStore, peerConnectionStore) => (
-            <ViewCamDetail viewCamStore={viewCamStore} peerConnectionStore={peerConnectionStore} cam={activeCam} />
+            <ViewCamDetail
+              viewCamStore={viewCamStore}
+              peerConnectionStore={peerConnectionStore}
+              cam={activeCam}
+              userStore={userStore}
+            />
           )}
         </Subscribe>
       );
     } else {
-      activeCamRender = <h4>No active cam</h4>;
+      activeCamRender = <h4>No active streams</h4>;
     }
 
     return (
       <div>
+        <h2>Available Streams:</h2>
         <div>{camListRender}</div>
         <div>{activeCamRender}</div>
       </div>

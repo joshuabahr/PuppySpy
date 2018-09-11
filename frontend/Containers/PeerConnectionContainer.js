@@ -172,10 +172,13 @@ class PeerConnectionContainer extends Container {
   };
 
   handleLogOut = cam => {
+    console.log('handle log out cam ', cam);
     socket.emit('leavestream', cam);
     socket.removeAllListeners();
-    this.pc.close();
-    this.pc = null;
+    if (this.pc) {
+      this.pc.close();
+      this.pc = null;
+    }
     this.cam = null;
     console.log('pc is closed ', this.pc, this.cam);
   };

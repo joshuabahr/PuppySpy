@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 import { Navbar, NavbarToggler, NavbarBrand, Collapse, Nav, NavItem, NavLink } from 'reactstrap';
 import Auth from './Auth/Auth';
 
@@ -14,6 +14,7 @@ class Header extends Component {
     };
 
     this.toggle = this.toggle.bind(this);
+    this.collapseNavbar = this.collapseNavbar.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -26,6 +27,13 @@ class Header extends Component {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
 
+  collapseNavbar() {
+    const { isOpen } = this.state;
+    if (isOpen) {
+      this.setState({ isOpen: false });
+    }
+  }
+
   login() {
     auth.login();
   }
@@ -35,57 +43,56 @@ class Header extends Component {
   }
 
   render() {
+    console.log('header load');
     const { isOpen } = this.state;
 
     let list;
     const loggedIn = (
-      <div id="nav">
-        <Navbar dark className="my-navbar" expand="md">
-          <NavbarBrand className="my-navbarbrand" href="/Home">
-            PuppySpy
-          </NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={isOpen} navbar>
-            <Nav navbar>
-              <NavItem>
-                <NavLink tag={Link} to="/" onClick={this.logout}>
-                  Log Out
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} to="/Profile" onClick={this.toggle}>
-                  Profile
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} to="/ViewCam" onClick={this.toggle}>
-                  View Streams
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} to="/SetCam" onClick={this.toggle}>
-                  Manage Streams
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
-    );
-
-    const loggedOut = (
-      <div>
-        <Navbar expand="md">
-          <NavbarBrand href="/Home">PuppySpy</NavbarBrand>
-          <Nav navbar className="mr-auto">
+      <Navbar dark className="my-navbar" expand="md">
+        <NavbarBrand className="my-navbarbrand" href="/Home">
+          PuppySpy
+        </NavbarBrand>
+        <NavbarToggler onClick={this.toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav navbar>
             <NavItem>
-              <NavLink tag={Link} to="/Callback" onClick={this.login}>
-                Log In
+              <NavLink tag={RouterNavLink} to="/" onClick={this.logout}>
+                Log Out
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RouterNavLink} to="/Profile" activeClassName="active" onClick={this.collapseNavbar}>
+                Profile
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RouterNavLink} to="/ViewCam" activeClassName="active" onClick={this.collapseNavbar}>
+                View Streams
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RouterNavLink} to="/SetCam" activeClassName="active" onClick={this.collapseNavbar}>
+                Manage Streams
               </NavLink>
             </NavItem>
           </Nav>
-        </Navbar>
-      </div>
+        </Collapse>
+      </Navbar>
+    );
+
+    const loggedOut = (
+      <Navbar dark className="my-navbar">
+        <NavbarBrand className="my-navbarbrand" href="/Home">
+          PuppySpy
+        </NavbarBrand>
+        <Nav navbar className="mr-auto">
+          <NavItem>
+            <NavLink tag={Link} to="/Callback" onClick={this.login}>
+              Log In
+            </NavLink>
+          </NavItem>
+        </Nav>
+      </Navbar>
     );
 
     if (!auth.isAuthenticated()) {
@@ -94,7 +101,7 @@ class Header extends Component {
       list = loggedIn;
     }
 
-    return <div>{list}</div>;
+    return <div id="nav">{list}</div>;
   }
 }
 

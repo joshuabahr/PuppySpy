@@ -6,8 +6,6 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
-// TODO: Add remoteClose functionality
-
 class SetCam extends Component {
   constructor(props) {
     super(props);

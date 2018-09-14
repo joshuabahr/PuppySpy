@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-// TODO: Close cam function, forces any open peer connections to close
-
 class SetCamDetail extends Component {
   constructor(props) {
     super(props);

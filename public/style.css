@@ -1,0 +1,62 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+#nav .navbar {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  background-color: gray;
+}
+
+#nav .navbar-brand {
+  color: darkgray;
+}
+
+#nav a.navbar-brand:hover {
+  color: darkgray;
+}
+
+#nav .nav-link {
+  color: lightgray;
+}
+
+#nav a.nav-link:hover {
+  color: lightgray;
+}
+
+button.navbar-toggler:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.site {
+  width: 100%;
+  height: 100%;
+  font-family: monospace;
+  background-color: white;
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  font-size: 12px;
+  font-weight: lighter;
+  color: gray;
+  background-color: lightgray;
+}
+
+.footer a {
+  color: gray;
+}
+
+.footer a:hover {
+  color: white;
+}
+
+.footer a:visited {
+  color: gray;
+}

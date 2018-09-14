@@ -93,7 +93,7 @@ class SetCam extends Component {
         </Subscribe>
       );
     } else {
-      activeCamRender = <h4>No active stream</h4>;
+      activeCamRender = null;
     }
 
     if (createNew) {

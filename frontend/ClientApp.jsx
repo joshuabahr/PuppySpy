@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../public/style.css';
 import React from 'react';
 import { Provider } from 'unstated';
 import { render } from 'react-dom';

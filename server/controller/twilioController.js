@@ -19,6 +19,9 @@ const sendSMSAlert = (req, res) => {
       console.log(message.sid);
       res.send(message.sid);
     })
+    .catch(error => {
+      console.log('error sending alert SMS ', error);
+    })
     .done();
 };
 

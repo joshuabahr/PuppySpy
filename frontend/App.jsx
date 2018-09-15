@@ -11,13 +11,13 @@ const App = () => (
   <div>
     <Subscribe to={[UserContainer]}>
       {userStore => (
-        <div className="site">
+        <div id="site">
           <Header userStore={userStore} />
           <Main userStore={userStore} />
+          <Footer />
         </div>
       )}
     </Subscribe>
-    <Footer />
   </div>
 );
 

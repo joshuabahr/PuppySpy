@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
+import { Container, Row, Col } from 'reactstrap';
 import UserContainer from './Containers/UserContainer';
 import SetCamContainer from './Containers/SetCamContainer';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
@@ -125,11 +126,17 @@ class SetCam extends Component {
     }
 
     return (
-      <div>
-        <div>{camListRender}</div>
-        <div>{activeCamRender}</div>
-        <div>{newCam}</div>
-      </div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <div>{camListRender}</div>
+            <div>{newCam}</div>
+          </Col>
+          <Col>
+            <div>{activeCamRender}</div>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

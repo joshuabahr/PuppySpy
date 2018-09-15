@@ -56,7 +56,7 @@ class Header extends Component {
         <Collapse isOpen={isOpen} navbar>
           <Nav navbar>
             <NavItem>
-              <NavLink tag={RouterNavLink} to="/" onClick={this.logout}>
+              <NavLink tag={RouterNavLink} to="/Logout" activeClassName="active" onClick={this.logout}>
                 Log Out
               </NavLink>
             </NavItem>

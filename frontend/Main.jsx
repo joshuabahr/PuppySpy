@@ -26,11 +26,16 @@ const handleAuthentication = ({ location }) => {
 const Main = ({ userStore }) => {
   console.log('main props ', userStore);
   return (
-    <main>
+    <div id="main">
       <Switch>
         <Route
           exact
           path="/"
+          render={props => (auth.isAuthenticated() ? <Redirect to="/Home" {...props} /> : <Landing />)}
+        />
+        <Route
+          exact
+          path="/Logout"
           render={props => (auth.isAuthenticated() ? <Redirect to="/Home" {...props} /> : <Landing />)}
         />
         <Route
@@ -94,7 +99,7 @@ const Main = ({ userStore }) => {
         />
         <Route component={Missing} />
       </Switch>
-    </main>
+    </div>
   );
 };
 

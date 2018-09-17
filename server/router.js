@@ -6,7 +6,7 @@ const twilioController = require('./controller/twilioController');
 // User profile routing
 router.post('/user/signup', userController.signupUser);
 router.get('/user/profile/:userId', userController.fetchUserProfile);
-router.put('/user/profile/:userId', userController.editUserProfile);
+router.put('/user/profile/:userId', userController.updatePhoneNo);
 
 // Cam routing
 router.post('/cam/create', camController.createCam);
@@ -19,6 +19,12 @@ router.post('/cam/adduser', camController.addAllowedCam);
 router.put('/cam/close', camController.closeCam);
 
 // Twilio routing
-router.post('/cam/alert', twilioController.sendSMSAlert);
+router.post('/sms/alert', twilioController.sendMotionAlert);
+router.post('/sms/subscribe', twilioController.sendSubscribeAlert);
+// following for twilio webhook
+// router.post('/sms/unsubscribe', twilioController.removePhoneNo);
+
+// testing
+router.post('/sms/test', twilioController.blockPhoneNo);
 
 module.exports = router;

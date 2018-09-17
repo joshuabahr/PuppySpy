@@ -21,6 +21,10 @@ const User_Cam = db.define('user_cam', {
   }
 });
 
+const Blockphone = db.define('blockphone', {
+  phone: Sequelize.STRING
+})
+
 User.hasMany(Cam);
 Cam.belongsTo(User);
 
@@ -34,4 +38,4 @@ User_Cam.belongsTo(User);
 Cam.hasMany(User_Cam);
 User_Cam.belongsTo(Cam);
 
-module.exports = { User, Cam, User_Cam };
+module.exports = { User, Cam, User_Cam, Blockphone };

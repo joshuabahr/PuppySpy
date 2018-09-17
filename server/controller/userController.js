@@ -24,7 +24,7 @@ const signupUser = (req, res) => {
     });
 };
 
-const editUserProfile = (req, res) => {
+/* const editUserProfile = (req, res) => {
   console.log('edit user profile ', req.body);
   Table.User.update(
     {
@@ -39,6 +39,7 @@ const editUserProfile = (req, res) => {
     .then(response => res.status(200).send(response[1].dataValues))
     .catch(error => res.send(error));
 };
+ */
 
 const fetchUserProfile = (req, res) => {
   Table.User.findOne({
@@ -50,4 +51,28 @@ const fetchUserProfile = (req, res) => {
     .catch(error => res.send(error));
 };
 
-module.exports = { signupUser, editUserProfile, fetchUserProfile };
+const updatePhoneNo = (req, res) => {
+  Table.Blockphone.findOne({
+    where: { phone: req.body.phone }
+  })
+    .then(response => {
+      if (!response) {
+        Table.User.update(
+          {
+            phone: req.body.phone
+          },
+          {
+            where: { id: req.params.userId }
+          }
+        ).then(userupdate => {
+          console.log('phone update ', userupdate);
+          res.send(userupdate);
+        });
+      } else {
+        res.send('BLOCKED');
+      }
+    })
+    .catch(error => res.send(error));
+};
+
+module.exports = { signupUser, fetchUserProfile, updatePhoneNo };

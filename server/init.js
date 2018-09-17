@@ -14,6 +14,7 @@ const init = () => {
     .then(() => Table.User.sync(refresh))
     .then(() => Table.Cam.sync(refresh))
     .then(() => Table.User_Cam.sync(refresh))
+    .then(() => Table.Blockphone.sync(refresh))
     .then(() => console.log('successfully synced with database'))
     .catch(err => console.error('error syncing with database', err));
 };

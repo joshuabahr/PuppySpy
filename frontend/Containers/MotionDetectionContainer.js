@@ -103,7 +103,7 @@ class MotionDetectionContainer extends Container {
   motionDetection = () => {
     clearInterval(this.captureInterval);
     this.setState({ motionDetected: true });
-    this.sendSMSAlert();
+    this.sendMotionAlert();
     setTimeout(() => {
       this.setState({ motionDetected: false });
       if (this.state.motionDetectionActive) {
@@ -124,9 +124,9 @@ class MotionDetectionContainer extends Container {
     });
   };
 
-  sendSMSAlert = () => {
+  sendMotionAlert = () => {
     axios
-      .post(`api/cam/alert`, {
+      .post(`api/sms/alert`, {
         phone: this.userPhoneNo,
         cam: this.cam
       })

@@ -8,50 +8,63 @@ class UserContainer extends Container {
     email: null,
     phone: null,
     id: null,
-    updatePhone: ''
-  }
+    updatePhone: '',
+    modalShow: false
+  };
 
-  logInUser = (profile) => {
+  logInUser = profile => {
     this.setState({
       id: profile.id,
       loggedIn: true,
       name: profile.name,
       email: profile.email,
       phone: profile.phone
-    })
-    .then(() => {
+    }).then(() => {
       console.log('userStore login state ', this.state);
-    })
-  }
+    });
+  };
 
-  handleInputChange = (e) => {
+  handleInputChange = e => {
     this.setState({
       updatePhone: e.target.value
-    })
-  }
+    });
+  };
 
-  updateUserPhone = (phone) => {
-    axios.put(`/api/user/profile/${this.state.id}`, {
-      phone
-    })
-    .then((response) => {
-      console.log('successfully updated phone no ', response);
-      this.setState({
-        phone,
-        updatePhone: ''
+  handleModalShow = () => {
+    this.setState({ modalShow: true });
+  };
+
+  handleModalClose = () => {
+    this.setState({ modalShow: false });
+  };
+
+  updateUserPhone = () => {
+    const { updatePhone, id } = this.state;
+    axios
+      .put(`/api/user/profile/${id}`, {
+        phone: updatePhone
       })
-    })
-    .catch((error) => {
-      console.log('error updating phone no ', error);
-    })
-  }
-
-  setPhoneNumber = (phone) => {
-    this.setState({
-      phone
-    })
-    console.log('register phone number ', this.state);
-  }
+      .then(response => {
+        console.log('update response ', response);
+        if (response.data === 'BLOCKED') {
+          alert('This number has been blocked from use on this site');
+          this.setState({ modalShow: false, updatePhone: '', phone: null });
+        } else {
+          console.log('successfully updated phone no ', response);
+          this.setState({
+            phone: updatePhone,
+            updatePhone: '',
+            modalShow: false
+          });
+        }
+      })
+      .then(() => {
+        this.sendSubscribeAlert();
+      })
+      .catch(error => {
+        console.log('error updating phone no ', error);
+      });
+  };
 
   logOutUser = () => {
     this.setState({
@@ -60,9 +73,41 @@ class UserContainer extends Container {
       name: null,
       email: null,
       phone: null
-    })
+    });
     console.log('user logged out ', this.state);
-  }
+  };
+
+  sendSubscribeAlert = () => {
+    if (this.state.phone) {
+      axios
+        .post(`api/sms/subscribe`, {
+          phone: this.state.phone
+        })
+        .then(response => {
+          console.log('subscribe alert sent ', response);
+          if (response.data.status === 400) {
+            alert('invalid phone number entered');
+            this.invalidNumber();
+          }
+        })
+        .catch(error => console.log('error subscribing ', error));
+    } else {
+      console.log('blocked number');
+    }
+  };
+
+  invalidNumber = () => {
+    const { id } = this.state;
+    axios
+      .put(`/api/user/profile/${id}`, { phone: null })
+      .then(response => {
+        console.log('invalid phone number updated ', response);
+        this.setState({
+          phone: null
+        });
+      })
+      .catch(error => console.log('error updating invalid phone number ', error));
+  };
 }
 
 export default UserContainer;

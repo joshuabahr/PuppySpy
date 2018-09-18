@@ -48,7 +48,7 @@ class UserContainer extends Container {
         console.log('update response ', response);
         if (response.data === 'BLOCKED') {
           alert('This number has been blocked from use on this site');
-          this.setState({ modalShow: false, updatePhone: '', phone: null });
+          this.invalidNumber();
         } else {
           console.log('successfully updated phone no ', response);
           this.setState({
@@ -103,7 +103,9 @@ class UserContainer extends Container {
       .then(response => {
         console.log('invalid phone number updated ', response);
         this.setState({
-          phone: null
+          phone: null,
+          modalShow: false,
+          updatePhone: ''
         });
       })
       .catch(error => console.log('error updating invalid phone number ', error));

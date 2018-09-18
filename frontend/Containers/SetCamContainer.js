@@ -1,16 +1,15 @@
 import { Container } from 'unstated';
 import axios from 'axios';
 
-// BUGS: deleteCam not working
-
 class SetCamContainer extends Container {
   state = {
     personalCamList: null,
     personalActiveCam: null,
     updateName: '',
     updatePassword: '',
-    allowUser: '',
-    createNew: false
+    allowUser: 'email',
+    createNew: false,
+    allowUserModal: false
   };
 
   handleInputChange = e => {
@@ -84,15 +83,23 @@ class SetCamContainer extends Container {
     });
   };
 
-  allowCamUser = ({ camId, email }) => {
+  allowCamUser = id => {
+    const { allowUser } = this.state;
     axios
       .post(`api/cam/adduser`, {
-        camId,
-        email
+        camId: id,
+        email: allowUser
       })
       .then(response => {
         console.log('allowed user access to cam ', response);
-      });
+      })
+      .then(() => {
+        this.setState({
+          allowUser: '',
+          allowUserModal: false
+        });
+      })
+      .catch(error => console.log('error allowing user access ', error));
   };
 
   reloadAfterRemoteClose = userId => {
@@ -101,6 +108,14 @@ class SetCamContainer extends Container {
     }).then(() => {
       this.retrievePersonalCams(userId);
     });
+  };
+
+  handleModalShow = () => {
+    this.setState({ allowUserModal: true });
+  };
+
+  handleModalClose = () => {
+    this.setState({ allowUserModal: false });
   };
 }
 

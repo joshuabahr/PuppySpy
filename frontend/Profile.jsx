@@ -35,7 +35,7 @@ const Profile = ({
             <ListGroupItem>Phone: {phoneNo}</ListGroupItem>
             <ListGroupItem>
               <input type="text" value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
-              <button type="button" onClick={() => handleModalShow()}>
+              <button type="button" onClick={handleModalShow}>
                 click to update phone
               </button>
             </ListGroupItem>

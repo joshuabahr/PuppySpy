@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import AllowUserModal from './AllowUserModal';
 
 class SetCamDetail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      addUser: ''
-    };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.allowCamUser = this.allowCamUser.bind(this);
     this.logOut = this.logOut.bind(this);
   }
 
@@ -40,12 +34,6 @@ class SetCamDetail extends Component {
     }
   }
 
-  handleInputChange = e => {
-    const input = {};
-    input[e.target.name] = e.target.value;
-    this.setState(() => input);
-  };
-
   logOut() {
     const {
       cam,
@@ -63,29 +51,18 @@ class SetCamDetail extends Component {
     deleteCam(cam.id, cam.userId);
   }
 
-  allowCamUser() {
-    const { cam: id } = this.props;
-    const { addUser } = this.state;
-    axios
-      .post(`api/cam/adduser`, {
-        camId: id,
-        email: addUser
-      })
-      .then(response => {
-        console.log('allowed user access to cam ', response);
-      })
-      .then(() => {
-        this.setState({
-          addUser: ''
-        });
-      })
-      .catch(error => console.log('error allowing user access ', error));
-  }
-
   render() {
     const {
       cam,
-      setCamStore: { deleteCam, reloadAfterRemoteClose },
+      setCamStore: {
+        handleInputChange,
+        deleteCam,
+        reloadAfterRemoteClose,
+        handleModalShow,
+        handleModalClose,
+        allowCamUser,
+        state: { allowUserModal, allowUser }
+      },
       peerConnectionStore: {
         remoteCloseStream,
         state: { streamClosed }
@@ -128,18 +105,17 @@ class SetCamDetail extends Component {
       );
     }
 
-    const { addUser } = this.state;
-
     return (
       <div>
+        <AllowUserModal show={allowUserModal} camId={cam.id} onClose={handleModalClose} allowCamUser={allowCamUser} />
         {motion}
         <div>
           <h5>Stream Name: {cam.camName}</h5>
         </div>
         <div>
-          allow user access (email):
-          <input type="text" name="addUser" onChange={this.handleInputChange} value={addUser} />
-          <button type="button" onClick={this.allowCamUser}>
+          allow user access:
+          <input type="text" name="allowUser" onChange={handleInputChange} value={allowUser} />
+          <button type="button" onClick={() => handleModalShow()}>
             Add
           </button>
         </div>

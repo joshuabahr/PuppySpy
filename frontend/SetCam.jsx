@@ -7,6 +7,8 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
+// when creating second cam, does not reload cam list
+
 class SetCam extends Component {
   constructor(props) {
     super(props);

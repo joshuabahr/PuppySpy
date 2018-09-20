@@ -33,7 +33,7 @@ class MotionDetectionContainer extends Container {
 
   diffContext = null;
 
-  cooldownTimer = 300000;
+  cooldownTimer = null;
 
   userPhoneNo = null;
 
@@ -53,6 +53,8 @@ class MotionDetectionContainer extends Container {
 
     this.userPhoneNo = phoneNo;
     this.cam = camName;
+
+    this.cooldownTimer = 300000;
 
     this.video.srcObject = this.captureStream;
     console.log('MotionDetection set up ', this);
@@ -137,6 +139,10 @@ class MotionDetectionContainer extends Container {
   setCooldownTimer = min => {
     this.cooldownTimer = min * 60000;
     console.log('cooldown timer change ', this.cooldownTimer);
+  };
+
+  setCooldownTimerDefault = () => {
+    this.cooldownTimer = 300000;
   };
 }
 

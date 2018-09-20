@@ -19,6 +19,7 @@ class SetCamDetail extends Component {
   componentDidMount() {
     const {
       cam,
+      motionDetectionStore: { setCooldownTimerDefault },
       peerConnectionStore: { setCam, setUpStream, setAndSendStreamDescription, handleNewIce, handleRemoteCloseStream }
     } = this.props;
     console.log('set cam detail props ', this.props, this.state);
@@ -27,6 +28,7 @@ class SetCamDetail extends Component {
     setAndSendStreamDescription();
     handleNewIce();
     handleRemoteCloseStream();
+    setCooldownTimerDefault();
   }
 
   componentWillUnmount() {

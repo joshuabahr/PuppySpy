@@ -89,7 +89,7 @@ class SetCamDetail extends Component {
         state: { streamClosed }
       },
       motionDetectionStore: {
-        state: { motionDetected }
+        state: { motionDetected, motionDetectionActive }
       }
     } = this.props;
 
@@ -98,40 +98,7 @@ class SetCamDetail extends Component {
     let motion;
     let videoOrClosed = (
       <div>
-        <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
-      </div>
-    );
-
-    if (motionDetected) {
-      motion = (
-        <div>
-          <h1>MOTION DETECTED</h1>
-        </div>
-      );
-    } else {
-      motion = null;
-    }
-
-    if (streamClosed) {
-      videoOrClosed = (
-        <div>
-          <h1>Stream closed remotely</h1>
-          <button
-            type="button"
-            onClick={() => {
-              reloadAfterRemoteClose(cam.userId);
-            }}
-          >
-            Start another stream
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div>
         <AllowUserModal show={allowUserModal} camId={cam.id} onClose={handleModalClose} allowCamUser={allowCamUser} />
-        {motion}
         <div>
           <h5>Stream Name: {cam.camName}</h5>
         </div>
@@ -156,18 +123,21 @@ class SetCamDetail extends Component {
         <div>
           <button
             type="button"
+            className={motionDetectionActive ? 'motiondetectionactive' : null}
             onClick={() => {
               const {
                 userStore: {
                   state: { phone }
                 },
                 peerConnectionStore: { localStream },
-                motionDetectionStore: { getLocalStream }
+                motionDetectionStore: { getLocalStream, stopMotionDetection }
               } = this.props;
               if (!phone) {
                 alert('A phone number needs to be added to profile to receive motion detection alerts.');
-              } else if (phone) {
+              } else if (!motionDetectionActive) {
                 getLocalStream(localStream, phone, cam.camName);
+              } else if (motionDetectionActive) {
+                stopMotionDetection();
               }
             }}
           >
@@ -207,6 +177,39 @@ class SetCamDetail extends Component {
             </DropdownMenu>
           </Dropdown>
         </div>
+        <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
+      </div>
+    );
+
+    if (motionDetected) {
+      motion = (
+        <div>
+          <h1>MOTION DETECTED</h1>
+        </div>
+      );
+    } else {
+      motion = null;
+    }
+
+    if (streamClosed) {
+      videoOrClosed = (
+        <div>
+          <h1>Stream closed remotely</h1>
+          <button
+            type="button"
+            onClick={() => {
+              reloadAfterRemoteClose(cam.userId);
+            }}
+          >
+            Start another stream
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {motion}
         {videoOrClosed}
       </div>
     );

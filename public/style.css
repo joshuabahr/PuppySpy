@@ -90,3 +90,7 @@ button.navbar-toggler:focus {
 .dropdown .active {
   background-color: blue;
 }
+
+.motiondetectionactive {
+  background-color: red;
+}

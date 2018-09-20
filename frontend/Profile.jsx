@@ -2,8 +2,6 @@ import React from 'react';
 import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import AddPhoneModal from './AddPhoneModal';
 
-// on Phone number add, validates phone number by sending SMS
-
 // add a way to delete phone number via SMS response?
 
 const Profile = ({

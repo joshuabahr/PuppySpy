@@ -33,7 +33,7 @@ class MotionDetectionContainer extends Container {
 
   diffContext = null;
 
-  cooldownTimer = 60000;
+  cooldownTimer = 300000;
 
   userPhoneNo = null;
 
@@ -132,6 +132,11 @@ class MotionDetectionContainer extends Container {
       })
       .then(response => console.log('alert sent ', response))
       .catch(error => console.log('error sending alert ', error));
+  };
+
+  setCooldownTimer = min => {
+    this.cooldownTimer = min * 60000;
+    console.log('cooldown timer change ', this.cooldownTimer);
   };
 }
 

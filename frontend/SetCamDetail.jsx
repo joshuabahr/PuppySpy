@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import AllowUserModal from './AllowUserModal';
 
 class SetCamDetail extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      dropdownOpen: false,
+      active: '5'
+    };
+
+    this.toggle = this.toggle.bind(this);
+    this.selectCooldown = this.selectCooldown.bind(this);
     this.logOut = this.logOut.bind(this);
   }
 
@@ -13,7 +21,7 @@ class SetCamDetail extends Component {
       cam,
       peerConnectionStore: { setCam, setUpStream, setAndSendStreamDescription, handleNewIce, handleRemoteCloseStream }
     } = this.props;
-    console.log('set cam detail props ', this.props);
+    console.log('set cam detail props ', this.props, this.state);
     setCam(cam);
     setUpStream();
     setAndSendStreamDescription();
@@ -34,20 +42,31 @@ class SetCamDetail extends Component {
     }
   }
 
+  selectCooldown(val) {
+    const {
+      motionDetectionStore: { setCooldownTimer }
+    } = this.props;
+    setCooldownTimer(val);
+    this.setState({ active: val }, () => console.log('new state ', this.state));
+  }
+
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+
   logOut() {
     const {
       cam,
-      peerConnectionStore: { pc, handleStreamClose, handleLogOut, streamClosedFalse, remoteCloseStream },
+      peerConnectionStore: { localStream, handleLogOut, streamClosedFalse },
       setCamStore: { setActiveCam, deleteCam }
     } = this.props;
-    if (!pc) {
-      handleStreamClose(cam);
-    } else {
+    if (localStream) {
       handleLogOut(cam);
     }
     setActiveCam(null);
     streamClosedFalse();
-    remoteCloseStream(cam);
     deleteCam(cam.id, cam.userId);
   }
 
@@ -64,13 +83,15 @@ class SetCamDetail extends Component {
         state: { allowUserModal, allowUser }
       },
       peerConnectionStore: {
-        remoteCloseStream,
+        handleLogOut,
         state: { streamClosed }
       },
       motionDetectionStore: {
         state: { motionDetected }
       }
     } = this.props;
+
+    const { dropdownOpen, active } = this.state;
 
     let motion;
     let videoOrClosed = (
@@ -123,7 +144,7 @@ class SetCamDetail extends Component {
           <button
             type="button"
             onClick={() => {
-              remoteCloseStream(cam);
+              handleLogOut(cam);
               deleteCam(cam.id, cam.userId);
             }}
           >
@@ -141,11 +162,48 @@ class SetCamDetail extends Component {
                 peerConnectionStore: { localStream },
                 motionDetectionStore: { getLocalStream }
               } = this.props;
-              getLocalStream(localStream, phone, cam.camName);
+              if (!phone) {
+                alert('A phone number needs to be added to profile to receive motion detection alerts.');
+              } else if (phone) {
+                getLocalStream(localStream, phone, cam.camName);
+              }
             }}
           >
             Set Motion Detection
           </button>
+          <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle caret>Set Motion Detection Cooldown</DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem
+                className={active === '1' ? 'active' : 'notactive'}
+                value={1}
+                onClick={e => this.selectCooldown(e.target.value)}
+              >
+                1 min
+              </DropdownItem>
+              <DropdownItem
+                className={active === '5' ? 'active' : 'notactive'}
+                value={5}
+                onClick={e => this.selectCooldown(e.target.value)}
+              >
+                5 min
+              </DropdownItem>
+              <DropdownItem
+                className={active === '15' ? 'active' : 'notactive'}
+                value={15}
+                onClick={e => this.selectCooldown(e.target.value)}
+              >
+                15 min
+              </DropdownItem>
+              <DropdownItem
+                className={active === '30' ? 'active' : 'notactive'}
+                value={30}
+                onClick={e => this.selectCooldown(e.target.value)}
+              >
+                30 min
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
         {videoOrClosed}
       </div>

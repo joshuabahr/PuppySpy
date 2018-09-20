@@ -36,11 +36,11 @@ class ViewCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { handleLogOut },
+      peerConnectionStore: { handleCloseRemoteViewing },
       viewCamStore: { setActiveCam }
     } = this.props;
     console.log('logout props ', this.props);
-    handleLogOut(cam);
+    handleCloseRemoteViewing(cam);
     setActiveCam(null);
   }
 

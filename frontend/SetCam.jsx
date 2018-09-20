@@ -131,11 +131,11 @@ class SetCam extends Component {
       <Container fluid>
         <Row>
           <Col>
-            <div>{camListRender}</div>
-            <div>{newCam}</div>
+            {camListRender}
+            {newCam}
           </Col>
           <Col>
-            <div>{activeCamRender}</div>
+            {activeCamRender}
           </Col>
         </Row>
       </Container>

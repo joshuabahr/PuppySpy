@@ -33,18 +33,6 @@ const socketEvents = io => {
       console.log('stream remotely closed ', cam);
     });
 
-    socket.on('closestream', cam => {
-      io.of('/')
-        .in(cam.id)
-        .clients((error, clients) => {
-          if (error) throw error;
-          clients.forEach(client => {
-            io.sockets.connected[client].leave(cam.id);
-          });
-        });
-      io.sockets.in(cam.id).emit('streamclosed');
-    });
-
     socket.on('disconnect', () => {
       console.log('socket disconnected ', socket.connected);
     });

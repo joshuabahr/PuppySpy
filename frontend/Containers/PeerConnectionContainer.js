@@ -1,7 +1,9 @@
+/*
+eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["videoElem"] }]
+*/
+
 import { Container } from 'unstated';
 import io from 'socket.io-client';
-
-// TODO: Add socket.emit('closestream') and socket.on('closestream');
 
 const socket = io();
 
@@ -13,6 +15,8 @@ class PeerConnectionContainer extends Container {
   pc = null;
 
   localStream = null;
+
+  localVideo = null;
 
   mediaStreamConstraints = {
     audio: false,
@@ -80,8 +84,9 @@ class PeerConnectionContainer extends Container {
 
   gotLocalMediaStream = mediaStream => {
     this.localStream = mediaStream;
-    const localVideo = document.getElementById('localVideo');
-    localVideo.srcObject = mediaStream;
+    this.localVideo = document.getElementById('localVideo');
+    this.localVideo.srcObject = mediaStream;
+    console.log('localVideo ', this.localVideo);
   };
 
   createPeerConnection = () => {
@@ -164,15 +169,29 @@ class PeerConnectionContainer extends Container {
     });
   };
 
-  handleStreamClose = cam => {
+  /*  handleStreamClose = cam => {
     socket.emit('leavestream', cam);
     socket.removeAllListeners();
     this.cam = null;
     console.log('stream is closed');
-  };
+  }; */
 
   handleLogOut = cam => {
     console.log('handle log out cam ', cam);
+    console.log('logout src object', this.localVideo.srcObject);
+    socket.emit('leavestream', cam);
+    socket.removeAllListeners();
+    if (this.pc) {
+      this.pc.close();
+      this.pc = null;
+    }
+    this.stopStreamedVideo(this.localVideo);
+    this.cam = null;
+    this.localStream = null;
+    console.log('pc is closed ', this.pc, this.cam);
+  };
+
+  handleCloseRemoteViewing = cam => {
     socket.emit('leavestream', cam);
     socket.removeAllListeners();
     if (this.pc) {
@@ -199,9 +218,21 @@ class PeerConnectionContainer extends Container {
         this.pc.close();
         this.pc = null;
       }
+      this.stopStreamedVideo(this.localVideo);
       this.cam = null;
+      this.localStream = null;
       this.setState({ streamClosed: true });
     });
+  };
+
+  stopStreamedVideo = videoElem => {
+    const stream = videoElem.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach(track => {
+      track.stop();
+    });
+
+    videoElem.srcObject = null;
   };
 
   streamClosedFalse = () => {

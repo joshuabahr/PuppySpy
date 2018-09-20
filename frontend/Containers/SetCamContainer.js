@@ -40,6 +40,7 @@ class SetCamContainer extends Container {
   };
 
   deleteCam = (camId, userId) => {
+    console.log('delete cam camId ', camId);
     axios
       .put(`api/cam/close`, {
         camId

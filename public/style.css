@@ -86,3 +86,7 @@ button.navbar-toggler:focus {
   padding: 0;
   margin: 0;
 }
+
+.dropdown .active {
+  background-color: blue;
+}

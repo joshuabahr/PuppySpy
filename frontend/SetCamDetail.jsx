@@ -19,7 +19,7 @@ class SetCamDetail extends Component {
   componentDidMount() {
     const {
       cam,
-      motionDetectionStore: { setCooldownTimerDefault },
+      motionDetectionStore: { setCooldownTimerDefault, remoteCloseMotionDetection },
       peerConnectionStore: { setCam, setUpStream, setAndSendStreamDescription, handleNewIce, handleRemoteCloseStream }
     } = this.props;
     console.log('set cam detail props ', this.props, this.state);
@@ -29,6 +29,7 @@ class SetCamDetail extends Component {
     handleNewIce();
     handleRemoteCloseStream();
     setCooldownTimerDefault();
+    remoteCloseMotionDetection();
   }
 
   componentWillUnmount() {
@@ -135,7 +136,7 @@ class SetCamDetail extends Component {
               if (!phone) {
                 alert('A phone number needs to be added to profile to receive motion detection alerts.');
               } else if (!motionDetectionActive) {
-                getLocalStream(localStream, phone, cam.camName);
+                getLocalStream(localStream, phone, cam);
               } else if (motionDetectionActive) {
                 stopMotionDetection();
               }

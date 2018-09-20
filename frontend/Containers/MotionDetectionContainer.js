@@ -1,5 +1,8 @@
 import { Container } from 'unstated';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io();
 
 class MotionDetectionContainer extends Container {
   state = {
@@ -39,7 +42,10 @@ class MotionDetectionContainer extends Container {
 
   cam = null;
 
-  getLocalStream = (stream, phoneNo, camName) => {
+  getLocalStream = (stream, phoneNo, cam) => {
+    socket.connect();
+    socket.emit('enterroom', cam);
+
     if (stream) {
       this.captureStream = stream;
     }
@@ -52,7 +58,7 @@ class MotionDetectionContainer extends Container {
     this.diffContext = this.diffCanvas.getContext('2d');
 
     this.userPhoneNo = phoneNo;
-    this.cam = camName;
+    this.cam = cam;
 
     this.video.srcObject = this.captureStream;
     console.log('MotionDetection set up ', this);
@@ -120,19 +126,22 @@ class MotionDetectionContainer extends Container {
   stopMotionDetection = () => {
     clearInterval(this.captureInterval);
     this.captureInterval = null;
-    this.setState({ motionDetectionActive: false }).then(() => {
+    socket.emit('leavestream', this.cam);
+    socket.removeAllListeners();
+    this.setState({ motionDetectionActive: false, motionDetected: false }).then(() => {
       console.log('stop motion detection ', this.state.motionDetectionActive);
     });
   };
 
   sendMotionAlert = () => {
-    axios
+    console.log('send sms stand in');
+    /* axios
       .post(`api/sms/alert`, {
         phone: this.userPhoneNo,
-        cam: this.cam
+        cam: this.cam.camName
       })
       .then(response => console.log('alert sent ', response))
-      .catch(error => console.log('error sending alert ', error));
+      .catch(error => console.log('error sending alert ', error)); */
   };
 
   setCooldownTimer = min => {
@@ -142,6 +151,13 @@ class MotionDetectionContainer extends Container {
 
   setCooldownTimerDefault = () => {
     this.cooldownTimer = 300000;
+  };
+
+  remoteCloseMotionDetection = () => {
+    socket.on('remoteclosestream', () => {
+      this.stopMotionDetection();
+      console.log('Motion Detection remote close ');
+    });
   };
 }
 

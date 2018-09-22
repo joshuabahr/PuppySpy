@@ -41,12 +41,12 @@ class ViewCam extends Component {
           viewCamButton = null;
         }
         return (
-          <div key={cam.id}>
+          <React.Fragment key={cam.id}>
             <li>
               Stream Name: {cam.camName}
               {viewCamButton}
             </li>
-          </div>
+          </React.Fragment>
         );
       });
     } else {
@@ -72,7 +72,6 @@ class ViewCam extends Component {
 
     return (
       <div>
-        <h2>Available Streams:</h2>
         <div>{camListRender}</div>
         <div>{activeCamRender}</div>
       </div>

@@ -75,6 +75,11 @@ class Header extends Component {
                 Manage Streams
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink tag={RouterNavLink} to="/Tech" activeClassName="active" onClick={this.collapseNavbar}>
+                Tech
+              </NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>

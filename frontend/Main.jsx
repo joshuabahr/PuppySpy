@@ -7,6 +7,7 @@ import Profile from './Profile';
 import Auth from './Auth/Auth';
 import SetCam from './SetCam';
 import ViewCam from './ViewCam';
+import Tech from './Tech';
 import SetCamContainer from './Containers/SetCamContainer';
 import ViewCamContainer from './Containers/ViewCamContainer';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
@@ -97,6 +98,7 @@ const Main = ({ userStore }) => {
             )
           }
         />
+        <Route exact path="/Tech" render={() => <Tech />} />
         <Route component={Missing} />
       </Switch>
     </div>

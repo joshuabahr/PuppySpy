@@ -60,7 +60,7 @@ class SetCam extends Component {
 
     if (personalCamList) {
       camListRender = personalCamList.map(cam => (
-        <div key={cam.id}>
+        <React.Fragment key={cam.id}>
           <li>
             Cam Name: {cam.camName}, Cam ID: {cam.id}
             <button
@@ -73,7 +73,7 @@ class SetCam extends Component {
               End Stream
             </button>
           </li>
-        </div>
+        </React.Fragment>
       ));
     } else {
       camListRender = <h4>No active streams</h4>;
@@ -94,7 +94,7 @@ class SetCam extends Component {
         </Subscribe>
       );
     } else {
-      activeCamRender = null;
+      activeCamRender = <h4>No stream active</h4>;
     }
 
     if (createNew) {
@@ -134,9 +134,7 @@ class SetCam extends Component {
             {camListRender}
             {newCam}
           </Col>
-          <Col>
-            {activeCamRender}
-          </Col>
+          <Col>{activeCamRender}</Col>
         </Row>
       </Container>
     );

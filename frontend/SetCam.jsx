@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import UserContainer from './Containers/UserContainer';
 import SetCamContainer from './Containers/SetCamContainer';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
@@ -62,16 +62,17 @@ class SetCam extends Component {
       camListRender = personalCamList.map(cam => (
         <React.Fragment key={cam.id}>
           <li>
-            Cam Name: {cam.camName}, Cam ID: {cam.id}
-            <button
-              type="button"
+            <b>Cam Name:</b> {cam.camName} &nbsp;&nbsp;
+            <Button
+              className="setcambutton"
+              color="danger"
               onClick={() => {
                 remoteCloseStream(cam);
                 deleteCam(cam.id, id);
               }}
             >
               End Stream
-            </button>
+            </Button>
           </li>
         </React.Fragment>
       ));
@@ -99,7 +100,7 @@ class SetCam extends Component {
 
     if (createNew) {
       newCam = (
-        <div>
+        <React.Fragment>
           <div>
             <h5>Stream name:</h5>
             <input
@@ -115,23 +116,23 @@ class SetCam extends Component {
               Add New Stream
             </button>
           </div>
-        </div>
+        </React.Fragment>
       );
     } else if (personalActiveCam) {
       newCam = null;
     } else {
       newCam = (
-        <button type="button" onClick={() => setCreateCam()}>
+        <Button color="info" onClick={() => setCreateCam()}>
           Create New Stream
-        </button>
+        </Button>
       );
     }
 
     return (
-      <Container fluid>
+      <Container fluid className="mainview setcam">
         <Row>
           <Col>
-            {camListRender}
+            <ul>{camListRender}</ul>
             {newCam}
           </Col>
           <Col>{activeCamRender}</Col>

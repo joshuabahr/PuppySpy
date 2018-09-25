@@ -54,8 +54,9 @@ class Home extends Component {
       }
     } = this.props;
     return (
-      <div>
-        <h4>Thank you for using PuppySpy, {name}.</h4>
+      <div className="mainview">
+        <h4>Welcome to PuppySpy, {name}.</h4>
+        <br />
         <ul>
           <li>
             To set up your current device as a security feed or end a current feed,{' '}

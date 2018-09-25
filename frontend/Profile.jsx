@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import AddPhoneModal from './AddPhoneModal';
 
 // add a way to delete phone number via SMS response?
@@ -22,20 +22,24 @@ const Profile = ({
   }
 
   return (
-    <Container fluid className="profile">
-      <Row className="justify-content-center">
+    <Container fluid className="mainview profile">
+      <Row>
         <AddPhoneModal show={modalShow} onClose={handleModalClose} updateUserPhone={updateUserPhone} />
 
-        <Col xs="11" sm="9" md="7" lg="5">
+        <Col xs="12" md="9">
           <ListGroup flush>
-            <ListGroupItem>E-mail: {email}</ListGroupItem>
-            <ListGroupItem>Name: {name}</ListGroupItem>
-            <ListGroupItem>Phone: {phoneNo}</ListGroupItem>
-            <ListGroupItem>
-              <input type="text" value={updatePhone} onChange={handleInputChange} placeholder="Phone No" />
-              <button type="button" onClick={handleModalShow}>
-                click to update phone
-              </button>
+            <ListGroupItem className="profilelist">
+              <b>E-mail:</b> {email}
+            </ListGroupItem>
+            <ListGroupItem className="profilelist">
+              <b>Name:</b> {name}
+            </ListGroupItem>
+            <ListGroupItem className="profilelist">
+              <b>Phone:</b> {phoneNo}
+            </ListGroupItem>
+            <ListGroupItem className="profilelist">
+              <input type="text" value={updatePhone} onChange={handleInputChange} placeholder="Phone Number" />
+              <Button onClick={handleModalShow}>click to update phone</Button>
             </ListGroupItem>
           </ListGroup>
         </Col>

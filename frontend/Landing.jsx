@@ -1,30 +1,15 @@
-/* eslint-disable */
+import React from 'react';
 
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
-class Landing extends Component {
-  login() {
-    this.props.auth.login();
-  }
-
-  render() {
-
-    return (
-      <div>
-        <h1>This is the Landing Page</h1>
-        <Link to="/Callback" onClick={this.login.bind(this)}>
-          Log In
-        </Link>
-        <br />
-        <Link to="/Profile">Profile</Link>
-        <br />
-        <Link to="/Test">Test</Link>
-        <br />
-        <Link to="/Callback">Callback</Link>
-      </div>
-    );
-  }
-}
+const Landing = () => (
+  <div>
+    <h1>Welcome to PuppySpy</h1>
+    <br />
+    <p>PuppySpy is a webapp that allows you to use any webcam device as a private security feed.</p>
+    <br />
+    <p>This security feed can be accessed from any device with internet capabilities.</p>
+    <br />
+    <p>Through motion detection and SMS, PuppySpy will also alert you to any unexpected visitors.</p>
+  </div>
+);
 
 export default Landing;

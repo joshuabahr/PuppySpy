@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Subscribe } from 'unstated';
+import Landing from './Landing';
 import Callback from './Callback';
 import Home from './Home';
 import Profile from './Profile';
@@ -15,8 +16,6 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 const auth = new Auth();
 
 const Missing = () => <h1>404</h1>;
-
-const Landing = () => <h1>Landing</h1>;
 
 const handleAuthentication = ({ location }) => {
   if (/access_token|id_token|error/.test(location.hash)) {

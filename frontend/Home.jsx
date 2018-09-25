@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Auth from './Auth/Auth';
 
 const auth = new Auth();
@@ -13,13 +14,22 @@ class Home extends Component {
 
   componentDidMount() {
     console.log('Home props ', this.props);
-    auth.getProfile((error, profile) => {
-      if (!profile) {
-        console.log('error in getProfile ', error);
-      } else {
-        this.registerUser(profile);
+
+    const {
+      userStore: {
+        state: { loggedIn }
       }
-    });
+    } = this.props;
+    console.log('logged in ', loggedIn);
+    if (!loggedIn) {
+      auth.getProfile((error, profile) => {
+        if (!profile) {
+          console.log('error in getProfile ', error);
+        } else {
+          this.registerUser(profile);
+        }
+      });
+    }
   }
 
   registerUser(profile) {
@@ -45,8 +55,19 @@ class Home extends Component {
     } = this.props;
     return (
       <div>
-        <h1>This is the Home Page</h1>
-        <h4>Thanks for logging in, {name} </h4>
+        <h4>Thank you for using PuppySpy, {name}.</h4>
+        <ul>
+          <li>
+            To set up your current device as a security feed or end a current feed,{' '}
+            <Link to="/SetCam">Manage Streams</Link>
+          </li>
+          <li>
+            To view your available security feeds, <Link to="/ViewCam">View Streams</Link>
+          </li>
+          <li>
+            To enable motion detection alerts, add a SMS-enabled phone number to <Link to="/Profile">Profile</Link>
+          </li>
+        </ul>
       </div>
     );
   }

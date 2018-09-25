@@ -49,7 +49,7 @@ class Header extends Component {
     let list;
     const loggedIn = (
       <Navbar dark className="my-navbar" expand="md">
-        <NavbarBrand className="my-navbarbrand" href="/Home">
+        <NavbarBrand tag={RouterNavLink} className="my-navbarbrand" to="/Home">
           PuppySpy
         </NavbarBrand>
         <NavbarToggler onClick={this.toggle} />

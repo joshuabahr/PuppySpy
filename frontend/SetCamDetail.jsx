@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 import AllowUserModal from './AllowUserModal';
 
 class SetCamDetail extends Component {
@@ -100,30 +100,24 @@ class SetCamDetail extends Component {
     let videoOrClosed = (
       <div>
         <AllowUserModal show={allowUserModal} camId={cam.id} onClose={handleModalClose} allowCamUser={allowCamUser} />
-        <div>
-          <h5>Stream Name: {cam.camName}</h5>
-        </div>
-        <div>
-          allow user access:
-          <input type="text" name="allowUser" onChange={handleInputChange} value={allowUser} />
-          <button type="button" onClick={() => handleModalShow()}>
-            Add
-          </button>
-        </div>
-        <div>
-          <button
-            type="button"
+        <h5>Stream Name: {cam.camName}</h5>
+        allow user access:
+        <input type="text" name="allowUser" placeholder="email" onChange={handleInputChange} value={allowUser} />
+        <Button color="info" onClick={() => handleModalShow()}>
+          Add
+        </Button>
+        <div className="buttongroup">
+          <Button
+            color="info"
             onClick={() => {
               handleLogOut(cam);
               deleteCam(cam.id, cam.userId);
             }}
           >
             End Stream
-          </button>
-        </div>
-        <div>
-          <button
-            type="button"
+          </Button>
+          <Button
+            color="info"
             className={motionDetectionActive ? 'motiondetectionactive' : null}
             onClick={() => {
               const {
@@ -143,9 +137,11 @@ class SetCamDetail extends Component {
             }}
           >
             Set Motion Detection
-          </button>
-          <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>Set Motion Detection Cooldown</DropdownToggle>
+          </Button>
+          <ButtonDropdown isOpen={dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle color="info" caret>
+              Set Motion Detection Cooldown
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
                 className={active === '1' ? 'active' : 'notactive'}
@@ -176,7 +172,7 @@ class SetCamDetail extends Component {
                 30 min
               </DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </ButtonDropdown>
         </div>
         <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
       </div>

@@ -96,11 +96,38 @@ button.navbar-toggler:focus {
   padding: 14px 14px 14px 30px;
 }
 
-.setcam ul {
-  background-color: tan;
+.camview {
+  display: flex;
+  background-color: teal;
 }
 
-.setcam li {
+.camrow {
+  background-color: blue;
+  width: 100%;
+}
+
+.camlist {
+  flex: 0 1 25em;
+  border: 1px solid black;
+}
+
+.activecam {
+  background-color: green;
+  flex: 1;
+  border: 1px solid black;
+  margin: 0 0 0 2px;
+}
+
+.camlist ul,
+.camlist li {
+  background-color: tan;
+  list-style: none;
+  list-style-position: none;
+  margin: 0;
+  padding: 0;
+}
+
+.camlist li {
   background-color: gray;
   padding: 2px;
   margin: 2px;
@@ -112,4 +139,13 @@ button.navbar-toggler:focus {
 
 .motiondetectionactive {
   background-color: red;
+}
+
+.buttongroup {
+  margin: 2px 0;
+}
+
+.buttongroup .btn:nth-child(2) {
+  margin-left: 2px;
+  margin-right: 2px;
 }

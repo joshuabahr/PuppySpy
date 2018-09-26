@@ -172,6 +172,7 @@ class PeerConnectionContainer extends Container {
   handleLogOut = cam => {
     console.log('handle log out cam ', cam);
     console.log('logout src object', this.localVideo.srcObject);
+    socket.emit('closestream', cam);
     socket.emit('leavestream', cam);
     socket.removeAllListeners();
     if (this.pc) {
@@ -204,7 +205,7 @@ class PeerConnectionContainer extends Container {
 
   handleRemoteCloseStream = () => {
     socket.on('remoteclosestream', () => {
-      console.log('stream closed remotely');
+      console.log('handle remote close stream');
       socket.emit('leavestream', this.cam);
       socket.removeAllListeners();
       if (this.pc) {
@@ -212,6 +213,20 @@ class PeerConnectionContainer extends Container {
         this.pc = null;
       }
       this.stopStreamedVideo(this.localVideo);
+      this.cam = null;
+      this.localStream = null;
+      this.setState({ streamClosed: true });
+    });
+  };
+
+  handleViewStreamClosed = () => {
+    socket.on('closestream', () => {
+      socket.emit('leavestream', this.cam);
+      socket.removeAllListeners();
+      if (this.pc) {
+        this.pc.close();
+        this.pc = null;
+      }
       this.cam = null;
       this.localStream = null;
       this.setState({ streamClosed: true });

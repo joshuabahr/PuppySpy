@@ -15,21 +15,26 @@ const socketEvents = io => {
     });
 
     socket.on('streamerdescription', details => {
-      io.sockets.in(details.cam.id).emit('streamerdescription', details.sdp);
+      socket.broadcast.to(details.cam.id).emit('streamerdescription', details.sdp);
       console.log('streamer description ', details.cam.id);
     });
 
     socket.on('recipientdescription', details => {
-      io.sockets.in(details.cam.id).emit('recipientdescription', details.sdp);
+      socket.broadcast.to(details.cam.id).emit('recipientdescription', details.sdp);
       console.log('recipient description ', details.cam.id);
     });
 
     socket.on('icecandidate', details => {
-      io.sockets.in(details.cam.id).emit('newice', details);
+      socket.broadcast.to(details.cam.id).emit('newice', details);
+    });
+
+    socket.on('closestream', cam => {
+      socket.broadcast.to(cam.id).emit('closestream', cam);
+      console.log('stream closed ', cam);
     });
 
     socket.on('remoteclosestream', cam => {
-      io.sockets.in(cam.id).emit('remoteclosestream');
+      socket.broadcast.to(cam.id).emit('remoteclosestream', cam);
       console.log('stream remotely closed ', cam);
     });
 

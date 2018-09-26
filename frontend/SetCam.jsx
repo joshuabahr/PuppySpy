@@ -7,8 +7,6 @@ import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import MotionDetectionContainer from './Containers/MotionDetectionContainer';
 import SetCamDetail from './SetCamDetail';
 
-// when creating second cam, does not reload cam list
-
 class SetCam extends Component {
   constructor(props) {
     super(props);
@@ -46,6 +44,7 @@ class SetCam extends Component {
         handleInputChange,
         setCreateCam,
         deleteCam,
+        deleteRemoteCam,
         state: { personalCamList, personalActiveCam, createNew }
       },
       userStore: {
@@ -59,23 +58,43 @@ class SetCam extends Component {
     let newCam;
 
     if (personalCamList) {
-      camListRender = personalCamList.map(cam => (
-        <React.Fragment key={cam.id}>
-          <li>
-            <b>Cam Name:</b> {cam.camName} &nbsp;&nbsp;
+      let endStreamButton;
+      camListRender = personalCamList.map(cam => {
+        if (personalActiveCam && personalActiveCam.id === cam.id) {
+          endStreamButton = (
             <Button
               className="setcambutton"
               color="danger"
               onClick={() => {
-                remoteCloseStream(cam);
                 deleteCam(cam.id, id);
               }}
             >
               End Stream
             </Button>
-          </li>
-        </React.Fragment>
-      ));
+          );
+        } else {
+          endStreamButton = (
+            <Button
+              className="setcambutton"
+              color="danger"
+              onClick={() => {
+                remoteCloseStream(cam);
+                deleteRemoteCam(cam.id, id);
+              }}
+            >
+              End Stream
+            </Button>
+          );
+        }
+        return (
+          <React.Fragment key={cam.id}>
+            <li>
+              <b>Cam Name:</b> {cam.camName} &nbsp;&nbsp;
+              {endStreamButton}
+            </li>
+          </React.Fragment>
+        );
+      });
     } else {
       camListRender = <h4>No active streams</h4>;
     }
@@ -101,21 +120,18 @@ class SetCam extends Component {
     if (createNew) {
       newCam = (
         <React.Fragment>
-          <div>
-            <h5>Stream name:</h5>
-            <input
-              type="text"
-              name="updateName"
-              onChange={e => {
-                handleInputChange(e);
-              }}
-            />
-          </div>
-          <div>
-            <button type="button" onClick={this.createNewCam}>
-              Add New Stream
-            </button>
-          </div>
+          <h5>Stream name:</h5>
+          <input
+            type="text"
+            name="updateName"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+
+          <Button color="info" onClick={this.createNewCam}>
+            Add New Stream
+          </Button>
         </React.Fragment>
       );
     } else if (personalActiveCam) {
@@ -129,13 +145,13 @@ class SetCam extends Component {
     }
 
     return (
-      <Container fluid className="mainview setcam">
-        <Row>
-          <Col>
+      <Container fluid className="mainview camview">
+        <Row className="camrow">
+          <Col className="camlist">
             <ul>{camListRender}</ul>
             {newCam}
           </Col>
-          <Col>{activeCamRender}</Col>
+          <Col className="activecam">{activeCamRender}</Col>
         </Row>
       </Container>
     );

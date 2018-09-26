@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
 
 class ViewCamDetail extends Component {
   constructor(props) {
@@ -10,13 +11,13 @@ class ViewCamDetail extends Component {
 
   componentDidMount() {
     const {
-      peerConnectionStore: { setUpRecipient, setStreamerDescription, handleNewIce, handleRemoteCloseStream }
+      peerConnectionStore: { setUpRecipient, setStreamerDescription, handleNewIce, handleViewStreamClosed }
     } = this.props;
     this.setCurrentCam();
     setUpRecipient();
     setStreamerDescription();
     handleNewIce();
-    handleRemoteCloseStream();
+    handleViewStreamClosed();
   }
 
   componentWillUnmount() {
@@ -36,12 +37,13 @@ class ViewCamDetail extends Component {
   logOut() {
     const {
       cam,
-      peerConnectionStore: { handleCloseRemoteViewing },
+      peerConnectionStore: { handleCloseRemoteViewing, streamClosedFalse },
       viewCamStore: { setActiveCam }
     } = this.props;
     console.log('logout props ', this.props);
     handleCloseRemoteViewing(cam);
     setActiveCam(null);
+    streamClosedFalse();
   }
 
   render() {
@@ -58,16 +60,16 @@ class ViewCamDetail extends Component {
 
     let videoOrClosed = (
       <div>
-        <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
-        <button
-          type="button"
+        <Button
+          color="info"
           onClick={() => {
             setActiveCam(null);
             reloadAvailableStreams(id);
           }}
         >
           View another stream
-        </button>
+        </Button>
+        <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
       </div>
     );
 
@@ -75,9 +77,9 @@ class ViewCamDetail extends Component {
       videoOrClosed = (
         <div>
           <h1>Stream has been closed</h1>
-          <button type="button" onClick={() => reloadAvailableStreams(id)}>
+          <Button color="info" onClick={() => reloadAvailableStreams(id)}>
             View Another Stream
-          </button>
+          </Button>
         </div>
       );
     }

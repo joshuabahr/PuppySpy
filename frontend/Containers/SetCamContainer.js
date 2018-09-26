@@ -7,7 +7,7 @@ class SetCamContainer extends Container {
     personalActiveCam: null,
     updateName: '',
     updatePassword: '',
-    allowUser: 'email',
+    allowUser: '',
     createNew: false,
     allowUserModal: false
   };
@@ -49,6 +49,18 @@ class SetCamContainer extends Container {
         this.setState({
           personalActiveCam: null
         });
+      })
+      .then(() => {
+        console.log('cam closed');
+        this.retrievePersonalCams(userId);
+      });
+  };
+
+  deleteRemoteCam = (camId, userId) => {
+    console.log('delete cam camId ', camId);
+    axios
+      .put(`api/cam/close`, {
+        camId
       })
       .then(() => {
         console.log('cam closed');

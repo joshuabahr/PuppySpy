@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
+import { Container, Row, Col, Button } from 'reactstrap';
 import ViewCamDetail from './ViewCamDetail';
 import PeerConnectionContainer from './Containers/PeerConnectionContainer';
 import ViewCamContainer from './Containers/ViewCamContainer';
@@ -33,17 +34,17 @@ class ViewCam extends Component {
         let viewCamButton;
         if (!activeCam) {
           viewCamButton = (
-            <button type="button" onClick={() => setActiveCam(cam)}>
+            <Button color="info" onClick={() => setActiveCam(cam)}>
               View Stream
-            </button>
+            </Button>
           );
         } else {
-          viewCamButton = null;
+          viewCamButton = <Button color="secondary">View Stream</Button>;
         }
         return (
           <React.Fragment key={cam.id}>
             <li>
-              Stream Name: {cam.camName}
+              Stream Name: {cam.camName} &nbsp;&nbsp;
               {viewCamButton}
             </li>
           </React.Fragment>
@@ -71,10 +72,14 @@ class ViewCam extends Component {
     }
 
     return (
-      <div>
-        <div>{camListRender}</div>
-        <div>{activeCamRender}</div>
-      </div>
+      <Container fluid className="mainview camview">
+        <Row className="camrow">
+          <Col className="camlist">
+            <ul>{camListRender}</ul>
+          </Col>
+          <Col className="activecam">{activeCamRender}</Col>
+        </Row>
+      </Container>
     );
   }
 }

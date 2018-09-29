@@ -21,7 +21,7 @@ const socketEvents = io => {
 
     socket.on('recipientdescription', details => {
       socket.broadcast.to(details.cam.id).emit('recipientdescription', details.sdp);
-      console.log('recipient description ', details.cam.id);
+      console.log('recipient description ', details.sdp);
     });
 
     socket.on('icecandidate', details => {

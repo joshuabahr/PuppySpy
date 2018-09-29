@@ -8,8 +8,7 @@ module.exports = {
     'react-hot-loader/patch',
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     'webpack/hot/only-dev-server',
-    './frontend/ClientApp.jsx',
-    'webrtc-adapter'
+    './frontend/ClientApp.jsx'
   ],
   devtool: 'cheap-eval-source-map',
   output: {

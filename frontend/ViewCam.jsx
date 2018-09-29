@@ -39,7 +39,11 @@ class ViewCam extends Component {
             </Button>
           );
         } else {
-          viewCamButton = <Button color="secondary">View Stream</Button>;
+          viewCamButton = (
+            <Button disabled color="secondary">
+              View Stream
+            </Button>
+          );
         }
         return (
           <React.Fragment key={cam.id}>

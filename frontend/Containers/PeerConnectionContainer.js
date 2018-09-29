@@ -47,7 +47,7 @@ class PeerConnectionContainer extends Container {
   setAndSendStreamDescription = () => {
     socket.on('recipientdescription', sdp => {
       this.createPeerConnection();
-      console.log('setting recipient description');
+      console.log('setting recipient description', sdp);
       this.pc
         .setRemoteDescription(sdp)
         .then(() => {
@@ -59,7 +59,7 @@ class PeerConnectionContainer extends Container {
           this.pc.setLocalDescription(answer);
         })
         .then(() => {
-          console.log('streamer PC ', this.pc);
+          console.log('streamer this.pc ', this.pc);
           this.sendStreamerDescription();
         })
         .catch(error => {
@@ -71,14 +71,21 @@ class PeerConnectionContainer extends Container {
   setUpRecipient = () => {
     console.log('recipient setting up ', this.cam);
     this.createPeerConnection();
+    console.log('recipient setting up 2 ', this.pc.localDescription);
     this.pc
       .createOffer({ offerToReceiveVideo: true })
       .then(offer => {
+        console.log('offer ', offer);
         this.pc.setLocalDescription(offer);
       })
       .then(() => {
-        console.log('sending recipient description ', this.pc);
+        console.log('peer connection', this.pc);
+      })
+      .then(() => {
         this.sendRecipientDescription();
+      })
+      .catch(e => {
+        console.log('error recipient set up ', e);
       });
   };
 
@@ -92,11 +99,12 @@ class PeerConnectionContainer extends Container {
   createPeerConnection = () => {
     try {
       this.pc = new RTCPeerConnection(PC_CONFIG);
+      console.log('first pc ', this.pc.localDescription);
       this.pc.onicecandidate = this.handleIceCandidate;
       this.pc.ontrack = this.handleRemoteStreamAdded;
       this.pc.onremovetrack = this.handleRemoteStreamRemoved;
       this.pc.oniceconnectionstatechange = this.handleIceStateChange;
-      console.log('Created RTCPeerConnection');
+      console.log('Created RTCPeerConnection', this.pc.localDescription);
     } catch (e) {
       console.log('Failed to create PeerConnection, exception: ', e.message);
     }
@@ -107,8 +115,8 @@ class PeerConnectionContainer extends Container {
     if (event.candidate) {
       socket.emit('icecandidate', {
         type: 'candidate',
-        label: event.candidate.sdpMLineIndex,
-        id: event.candidate.sdpMid,
+        sdpMLineIndex: event.candidate.sdpMLineIndex,
+        sdpMid: event.candidate.sdpMid,
         candidate: event.candidate.candidate,
         cam: this.cam
       });
@@ -154,7 +162,7 @@ class PeerConnectionContainer extends Container {
   };
 
   sendRecipientDescription = () => {
-    console.log('sending recipient description');
+    console.log('sending recipient description 4', this.pc);
     socket.emit('recipientdescription', {
       cam: this.cam,
       sdp: this.pc.localDescription
@@ -182,7 +190,7 @@ class PeerConnectionContainer extends Container {
     this.stopStreamedVideo(this.localVideo);
     this.cam = null;
     this.localStream = null;
-    console.log('pc is closed ', this.pc, this.cam);
+    console.log('this.pc is closed ', this.pc, this.cam);
   };
 
   handleCloseRemoteViewing = cam => {
@@ -193,7 +201,7 @@ class PeerConnectionContainer extends Container {
       this.pc = null;
     }
     this.cam = null;
-    console.log('pc is closed ', this.pc, this.cam);
+    console.log('this.pc is closed ', this.pc, this.cam);
   };
 
   remoteCloseStream = cam => {

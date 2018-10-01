@@ -21,6 +21,7 @@ const createCam = (req, res) => {
     .catch(error => res.send(error));
 };
 
+// Sort by date
 const fetchActiveUserCams = (req, res) => {
   Table.User_Cam.findAll({
     where: {
@@ -60,6 +61,7 @@ const fetchAllUserCams = (req, res) => {
     });
 };
 
+// sort by date
 const fetchPersonalCams = (req, res) => {
   Table.User.findAll({
     include: [

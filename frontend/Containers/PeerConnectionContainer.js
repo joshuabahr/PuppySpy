@@ -51,12 +51,12 @@ class PeerConnectionContainer extends Container {
       this.pc
         .setRemoteDescription(sdp)
         .then(() => {
-          this.pc.addStream(this.localStream);
+          this.localStream.getTracks().forEach(t => this.pc.addTrack(t, this.localStream));
         })
         .then(() => this.pc.createAnswer())
         .then(answer => {
           console.log('answer ', answer);
-          this.pc.setLocalDescription(answer);
+          return this.pc.setLocalDescription(answer);
         })
         .then(() => {
           console.log('streamer this.pc ', this.pc);
@@ -74,12 +74,9 @@ class PeerConnectionContainer extends Container {
     console.log('recipient setting up 2 ', this.pc.localDescription);
     this.pc
       .createOffer({ offerToReceiveVideo: true })
-      .then(offer => {
-        console.log('offer ', offer);
-        this.pc.setLocalDescription(offer);
-      })
+      .then(offer => this.pc.setLocalDescription(offer))
       .then(() => {
-        console.log('peer connection', this.pc);
+        console.log('peer connection', this.pc.localDescription);
       })
       .then(() => {
         this.sendRecipientDescription();

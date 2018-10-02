@@ -21,10 +21,6 @@ router.put('/cam/close', camController.closeCam);
 // Twilio routing
 router.post('/sms/alert', twilioController.sendMotionAlert);
 router.post('/sms/subscribe', twilioController.sendSubscribeAlert);
-// following for twilio webhook
-// router.post('/sms/unsubscribe', twilioController.removePhoneNo);
-
-// testing
-router.post('/sms/test', twilioController.blockPhoneNo);
+router.post('/sms/unsubscribe', twilioController.removePhoneNo);
 
 module.exports = router;

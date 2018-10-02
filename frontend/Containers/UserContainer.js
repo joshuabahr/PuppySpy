@@ -55,11 +55,10 @@ class UserContainer extends Container {
             phone: updatePhone,
             updatePhone: '',
             modalShow: false
+          }).then(() => {
+            this.sendSubscribeAlert();
           });
         }
-      })
-      .then(() => {
-        this.sendSubscribeAlert();
       })
       .catch(error => {
         console.log('error updating phone no ', error);
@@ -78,22 +77,18 @@ class UserContainer extends Container {
   };
 
   sendSubscribeAlert = () => {
-    if (this.state.phone) {
-      axios
-        .post(`api/sms/subscribe`, {
-          phone: this.state.phone
-        })
-        .then(response => {
-          console.log('subscribe alert sent ', response);
-          if (response.data.status === 400) {
-            alert('invalid phone number entered');
-            this.invalidNumber();
-          }
-        })
-        .catch(error => console.log('error subscribing ', error));
-    } else {
-      console.log('blocked number');
-    }
+    axios
+      .post(`api/sms/subscribe`, {
+        phone: this.state.phone
+      })
+      .then(response => {
+        console.log('subscribe alert sent ', response);
+        if (response.data.status === 400) {
+          alert('invalid phone number entered');
+          this.invalidNumber();
+        }
+      })
+      .catch(error => console.log('error subscribing ', error));
   };
 
   invalidNumber = () => {

@@ -5,6 +5,8 @@ const Table = require('../models/tableModels');
 const client = twilio(config.accountSid, config.authToken);
 const MessageResponse = twilio.twiml.MessagingResponse;
 
+const important = 'change POOP to STOP before deployment';
+
 const subscribeMessage = `This number has been subscribed to receive SMS alerts from PuppySpy. Respond to this message with the word 'STOP' to have this number permanently removed`;
 
 const sendSubscribeAlert = (req, res) => {
@@ -52,11 +54,11 @@ const sendMotionAlert = (req, res) => {
     .done();
 };
 
-// Need to update to basic function when Twilio webhook set up, currently blocks phone number API
-const blockPhoneNo = (req, res) => {
+const blockPhoneNo = userNo => {
+  console.log('block number ', userNo);
   Table.User.find({
     where: {
-      phone: req.body.userNo
+      phone: userNo
     }
   })
     .then(user => {
@@ -71,16 +73,14 @@ const blockPhoneNo = (req, res) => {
     })
     .then(() => {
       Table.Blockphone.create({
-        phone: req.body.userNo
+        phone: userNo
       });
     })
-    .then(response => {
-      console.log('blocked phone no ', response);
-      res.send(response);
+    .then(() => {
+      console.log('blocked phone no ');
     })
     .catch(error => {
       console.log('error blocking phone no ', error);
-      res.send(error);
     });
 };
 
@@ -89,8 +89,11 @@ const removePhoneNo = (req, res) => {
   const userNo = req.body.From;
   const twiml = new MessageResponse();
 
-  if (messageBody.toUpperCase().includes('STOP')) {
-    blockPhoneNo(userNo);
+  console.log('message received ', messageBody, userNo);
+
+  if (messageBody.toUpperCase().includes('POOP')) {
+    const phoneNo = userNo.slice(2, 12);
+    blockPhoneNo(phoneNo);
     twiml.message('Number permanently deleted');
   } else {
     twiml.message(`If you want your number removed, please include 'STOP' in your response`);

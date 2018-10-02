@@ -2,8 +2,6 @@ import React from 'react';
 import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import AddPhoneModal from './AddPhoneModal';
 
-// add a way to delete phone number via SMS response?
-
 const Profile = ({
   userStore: {
     handleInputChange,

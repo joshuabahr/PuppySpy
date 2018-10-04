@@ -63,6 +63,7 @@ class SetCam extends Component {
         if (personalActiveCam && personalActiveCam.id === cam.id) {
           endStreamButton = (
             <Button
+              size="sm"
               className="setcambutton"
               color="danger"
               onClick={() => {
@@ -75,6 +76,7 @@ class SetCam extends Component {
         } else {
           endStreamButton = (
             <Button
+              size="sm"
               className="setcambutton"
               color="danger"
               onClick={() => {
@@ -129,7 +131,7 @@ class SetCam extends Component {
             }}
           />
 
-          <Button color="info" onClick={this.createNewCam}>
+          <Button size="sm" color="info" onClick={this.createNewCam}>
             Add New Stream
           </Button>
         </React.Fragment>
@@ -138,14 +140,14 @@ class SetCam extends Component {
       newCam = null;
     } else {
       newCam = (
-        <Button color="info" onClick={() => setCreateCam()}>
+        <Button size="sm" color="info" onClick={() => setCreateCam()}>
           Create New Stream
         </Button>
       );
     }
 
     return (
-      <Container fluid className="mainview camview">
+      <Container fluid className="camview">
         <Row className="camrow">
           <Col className="camlist">
             <ul>{camListRender}</ul>

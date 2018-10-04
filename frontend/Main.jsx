@@ -23,10 +23,9 @@ const handleAuthentication = ({ location }) => {
   }
 };
 
-const Main = ({ userStore }) => {
-  console.log('main props ', userStore);
-  return (
-    <div id="main">
+const Main = ({ userStore }) => (
+  <div id="main">
+    <div className="mainview">
       <Switch>
         <Route
           exact
@@ -101,7 +100,7 @@ const Main = ({ userStore }) => {
         <Route component={Missing} />
       </Switch>
     </div>
-  );
-};
+  </div>
+);
 
 export default Main;

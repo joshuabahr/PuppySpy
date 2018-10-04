@@ -20,12 +20,12 @@ const Profile = ({
   }
 
   return (
-    <Container fluid className="mainview profile">
+    <Container fluid className="profile">
       <Row>
         <AddPhoneModal show={modalShow} onClose={handleModalClose} updateUserPhone={updateUserPhone} />
 
-        <Col xs="12" md="9">
-          <ListGroup flush>
+        <Col xs="10" md="9">
+          <ListGroup flush className="profilelist">
             <ListGroupItem className="profilelist">
               <b>E-mail:</b> {email}
             </ListGroupItem>

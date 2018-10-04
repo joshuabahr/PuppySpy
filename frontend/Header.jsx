@@ -19,10 +19,6 @@ class Header extends Component {
     this.logout = this.logout.bind(this);
   }
 
-  componentDidMount() {
-    console.log('header props ', this.props);
-  }
-
   toggle() {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
@@ -43,7 +39,6 @@ class Header extends Component {
   }
 
   render() {
-    console.log('header load');
     const { isOpen } = this.state;
 
     let list;

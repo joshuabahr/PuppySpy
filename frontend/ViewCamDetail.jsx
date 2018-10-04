@@ -85,12 +85,12 @@ class ViewCamDetail extends Component {
     }
 
     return (
-      <div>
+      
         <div>
           <h5>Stream Name: {cam.camName}</h5>
+          {videoOrClosed}
         </div>
-        {videoOrClosed}
-      </div>
+      
     );
   }
 }

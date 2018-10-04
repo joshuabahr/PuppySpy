@@ -98,16 +98,17 @@ class SetCamDetail extends Component {
 
     let motion;
     let videoOrClosed = (
-      <div>
+      <React.Fragment>
         <AllowUserModal show={allowUserModal} camId={cam.id} onClose={handleModalClose} allowCamUser={allowCamUser} />
         <h5>Stream Name: {cam.camName}</h5>
         allow user access:
         <input type="text" name="allowUser" placeholder="email" onChange={handleInputChange} value={allowUser} />
-        <Button color="info" onClick={() => handleModalShow()}>
+        <Button size="sm" color="info" onClick={() => handleModalShow()}>
           Add
         </Button>
         <div className="buttongroup">
           <Button
+            size="sm"
             color="info"
             onClick={() => {
               handleLogOut(cam);
@@ -117,6 +118,7 @@ class SetCamDetail extends Component {
             End Stream
           </Button>
           <Button
+            size="sm"
             color="info"
             className={motionDetectionActive ? 'motiondetectionactive' : null}
             onClick={() => {
@@ -138,7 +140,7 @@ class SetCamDetail extends Component {
           >
             Set Motion Detection
           </Button>
-          <ButtonDropdown isOpen={dropdownOpen} toggle={this.toggle}>
+          <ButtonDropdown size="sm" isOpen={dropdownOpen} toggle={this.toggle}>
             <DropdownToggle color="info" caret>
               Set Motion Detection Cooldown
             </DropdownToggle>
@@ -175,7 +177,7 @@ class SetCamDetail extends Component {
           </ButtonDropdown>
         </div>
         <video id="localVideo" ref={this.localVideo} muted autoPlay playsInline />
-      </div>
+      </React.Fragment>
     );
 
     if (motionDetected) {
@@ -190,17 +192,17 @@ class SetCamDetail extends Component {
 
     if (streamClosed) {
       videoOrClosed = (
-        <div>
+        <React.Fragment>
           <h1>Stream closed remotely</h1>
-          <button
-            type="button"
+          <Button
+            size="small"
             onClick={() => {
               reloadAfterRemoteClose(cam.userId);
             }}
           >
             Start another stream
-          </button>
-        </div>
+          </Button>
+        </React.Fragment>
       );
     }
 

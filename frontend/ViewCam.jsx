@@ -29,18 +29,19 @@ class ViewCam extends Component {
     let camListRender;
     let activeCamRender;
 
-    if (camList) {
+    if (camList && camList.length > 0) {
+      console.log('cam list ', camList);
       camListRender = camList.map(cam => {
         let viewCamButton;
         if (!activeCam) {
           viewCamButton = (
-            <Button color="info" onClick={() => setActiveCam(cam)}>
+            <Button size="sm" color="info" onClick={() => setActiveCam(cam)}>
               View Stream
             </Button>
           );
         } else {
           viewCamButton = (
-            <Button disabled color="secondary">
+            <Button size="sm" disabled color="secondary">
               View Stream
             </Button>
           );
@@ -55,7 +56,7 @@ class ViewCam extends Component {
         );
       });
     } else {
-      camListRender = <h4>No available cams</h4>;
+      camListRender = <li>No available cams</li>;
     }
 
     if (activeCam) {
@@ -76,12 +77,14 @@ class ViewCam extends Component {
     }
 
     return (
-      <Container fluid className="mainview camview">
+      <Container fluid className="camview">
         <Row className="camrow">
           <Col className="camlist">
             <ul>{camListRender}</ul>
           </Col>
-          <Col className="activecam">{activeCamRender}</Col>
+          <Col xs="10" className="activecam">
+            {activeCamRender}
+          </Col>
         </Row>
       </Container>
     );

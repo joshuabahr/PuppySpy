@@ -54,7 +54,7 @@ class Home extends Component {
       }
     } = this.props;
     return (
-      <div className="mainview">
+      <div className="home">
         <h4>Welcome to PuppySpy, {name}.</h4>
         <br />
         <ul>

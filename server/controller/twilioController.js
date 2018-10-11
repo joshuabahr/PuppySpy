@@ -1,13 +1,12 @@
 const twilio = require('twilio');
-const config = require('../../config');
 const Table = require('../models/tableModels');
 
-const client = twilio(config.accountSid, config.authToken);
+const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 const MessageResponse = twilio.twiml.MessagingResponse;
 
-const important = 'change POOP to STOP before deployment';
-
 const subscribeMessage = `This number has been subscribed to receive SMS alerts from PuppySpy. Respond to this message with the word 'STOP' to have this number permanently removed`;
+
+const twilioNo = process.env.TWILIO_NO;
 
 const sendSubscribeAlert = (req, res) => {
   const userNo = `+1${req.body.phone}`;
@@ -17,7 +16,7 @@ const sendSubscribeAlert = (req, res) => {
   client.messages
     .create({
       body: subscribeMessage,
-      from: config.twilioNo,
+      from: twilioNo,
       to: userNo
     })
     .then(message => {
@@ -40,7 +39,7 @@ const sendMotionAlert = (req, res) => {
   client.messages
     .create({
       body: `Motion detected on stream: '${streamName}'`,
-      from: config.twilioNo,
+      from: twilioNo,
       to: userNo
     })
     .then(message => {
@@ -91,7 +90,7 @@ const removePhoneNo = (req, res) => {
 
   console.log('message received ', messageBody, userNo);
 
-  if (messageBody.toUpperCase().includes('POOP')) {
+  if (messageBody.toUpperCase().includes('STOP')) {
     const phoneNo = userNo.slice(2, 12);
     blockPhoneNo(phoneNo);
     twiml.message('Number permanently deleted');

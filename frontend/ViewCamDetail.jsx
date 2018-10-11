@@ -60,7 +60,7 @@ class ViewCamDetail extends Component {
 
     let videoOrClosed = (
       <React.Fragment>
-        <div className="buttongroup">
+        <div className="viewbutton">
           <Button
             size="sm"
             color="info"

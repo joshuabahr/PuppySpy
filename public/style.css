@@ -160,6 +160,10 @@ button.navbar-toggler:focus {
   margin-right: 2px;
 }
 
+.viewbutton {
+  margin: 2px 0;
+}
+
 video {
   max-height: auto;
   max-width: 100%;

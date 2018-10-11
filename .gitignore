@@ -11,6 +11,7 @@ _site/
 *.iml
 .idea/
 config.js
+.env
 yarn-error.log*
 yarn-debug.log*
 frontend/Auth/auth0-variables.js

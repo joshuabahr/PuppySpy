@@ -1,30 +1,39 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   context: __dirname,
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-    'webpack/hot/only-dev-server',
-    './frontend/ClientApp.jsx',
-    'webrtc-adapter'
-  ],
-  devtool: 'cheap-eval-source-map',
+  entry: ['./frontend/ClientApp.jsx', 'webrtc-adapter'],
+  devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.webpack-loader.js', '.web-loader.js', '.loader.js', '.js', '.jsx', '.json'],
+    modules: [path.resolve(__dirname, 'node_modules')]
   },
-  stats: {
-    colors: true,
-    reasons: true,
-    chunks: true
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
+    new CompressionPlugin({
+      filename: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js|css)$/,
+      threshold: 10240,
+      minRatio: 0.8,
+      deleteOriginalAssets: true
+    })
+  ],
+  optimization: {
+    minimizer: [new UglifyJsPlugin()]
   },
-  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NamedModulesPlugin()],
   module: {
     rules: [
       {
@@ -34,7 +43,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [{ loader: 'style-loader', options: { hmr: true } }, { loader: 'css-loader' }]
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
       }
     ]
   }

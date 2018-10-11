@@ -59,18 +59,21 @@ class ViewCamDetail extends Component {
     } = this.props;
 
     let videoOrClosed = (
-      <div>
-        <Button
-          color="info"
-          onClick={() => {
-            setActiveCam(null);
-            reloadAvailableStreams(id);
-          }}
-        >
-          View another stream
-        </Button>
+      <React.Fragment>
+        <div className="buttongroup">
+          <Button
+            size="sm"
+            color="info"
+            onClick={() => {
+              setActiveCam(null);
+              reloadAvailableStreams(id);
+            }}
+          >
+            View another stream
+          </Button>
+        </div>
         <video id="remoteVideo" ref={this.remoteVideo} muted autoPlay playsInline />
-      </div>
+      </React.Fragment>
     );
 
     if (streamClosed) {
@@ -85,12 +88,10 @@ class ViewCamDetail extends Component {
     }
 
     return (
-      
-        <div>
-          <h5>Stream Name: {cam.camName}</h5>
-          {videoOrClosed}
-        </div>
-      
+      <div>
+        <h5>Stream Name: {cam.camName}</h5>
+        {videoOrClosed}
+      </div>
     );
   }
 }

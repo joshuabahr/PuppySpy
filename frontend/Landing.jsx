@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Landing = () => (
-  <div className="mainview">
+  <div className="home">
     <h2>Welcome to PuppySpy</h2>
     <br />
     <ul>

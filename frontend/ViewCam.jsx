@@ -82,9 +82,7 @@ class ViewCam extends Component {
           <Col className="camlist">
             <ul>{camListRender}</ul>
           </Col>
-          <Col xs="10" className="activecam">
-            {activeCamRender}
-          </Col>
+          <Col className="activecam">{activeCamRender}</Col>
         </Row>
       </Container>
     );

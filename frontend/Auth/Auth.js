@@ -2,15 +2,14 @@
 
 import history from '../history';
 import auth0 from 'auth0-js';
-import AUTH_CONFIG from './auth0-variables';
 
 export default class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
-      domain: AUTH_CONFIG.domain,
-      clientID: AUTH_CONFIG.clientID,
-      redirectUri: AUTH_CONFIG.callbackUrl,
-      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      domain: process.env.AUTH_DOMAIN,
+      clientID: process.env.AUTH_ID,
+      redirectUri: process.env.AUTH_CALLBACK,
+      audience: `https://${process.env.AUTH_DOMAIN}/userinfo`,
       responseType: 'token id_token',
       scope: 'openid profile email'
     });

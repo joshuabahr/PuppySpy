@@ -11,7 +11,7 @@ const socketEvents = io => {
 
     socket.on('leavestream', cam => {
       socket.leave(cam.id);
-      console.log('leaving stream ', cam);
+      console.log('leaving stream ', cam.id);
     });
 
     socket.on('streamerdescription', details => {
@@ -21,7 +21,7 @@ const socketEvents = io => {
 
     socket.on('recipientdescription', details => {
       socket.broadcast.to(details.cam.id).emit('recipientdescription', details.sdp);
-      console.log('recipient description ', details.sdp);
+      console.log('recipient description ', details.cam.id);
     });
 
     socket.on('icecandidate', details => {
@@ -30,12 +30,12 @@ const socketEvents = io => {
 
     socket.on('closestream', cam => {
       socket.broadcast.to(cam.id).emit('closestream', cam);
-      console.log('stream closed ', cam);
+      console.log('stream closed ', cam.id);
     });
 
     socket.on('remoteclosestream', cam => {
       socket.broadcast.to(cam.id).emit('remoteclosestream', cam);
-      console.log('stream remotely closed ', cam);
+      console.log('stream remotely closed ', cam.id);
     });
 
     socket.on('disconnect', () => {

@@ -3,7 +3,7 @@
     "format": "prettier --write --single-quote --print-width=80 --tab-width=2 \"js/**/*.{js,jsx}\"",
     "lint": "./node_modules/.bin/eslint **/*.{js,jsx} --quiet",
     "dev": "webpack-dev-server",
-    "start": "node -r dotenv/config server/server.js",
+    "start": "node server/server.js",
     "watch": "webpack --watch"
   },
   "dependencies": {

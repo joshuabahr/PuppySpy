@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const server = require('http').Server(app);

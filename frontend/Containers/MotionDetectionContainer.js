@@ -135,13 +135,13 @@ class MotionDetectionContainer extends Container {
 
   sendMotionAlert = () => {
     console.log('send sms stand in');
-    /* axios
+    axios
       .post(`api/sms/alert`, {
         phone: this.userPhoneNo,
         cam: this.cam.camName
       })
       .then(response => console.log('alert sent ', response))
-      .catch(error => console.log('error sending alert ', error)); */
+      .catch(error => console.log('error sending alert ', error));
   };
 
   setCooldownTimer = min => {

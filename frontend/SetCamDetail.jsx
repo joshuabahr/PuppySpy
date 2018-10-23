@@ -50,7 +50,7 @@ class SetCamDetail extends Component {
       motionDetectionStore: { setCooldownTimer }
     } = this.props;
     setCooldownTimer(val);
-    this.setState({ active: val }, () => console.log('new state ', this.state));
+    this.setState({ active: val }, () => console.log('cooldown timer ', this.state));
   }
 
   toggle() {
@@ -90,7 +90,7 @@ class SetCamDetail extends Component {
         state: { streamClosed }
       },
       motionDetectionStore: {
-        state: { motionDetected, motionDetectionActive }
+        state: { motionDetectionState, motionDetectionActive }
       }
     } = this.props;
 
@@ -127,12 +127,12 @@ class SetCamDetail extends Component {
                   state: { phone }
                 },
                 peerConnectionStore: { localStream },
-                motionDetectionStore: { getLocalStream, stopMotionDetection }
+                motionDetectionStore: { startMotionDetection, stopMotionDetection }
               } = this.props;
               if (!phone) {
                 alert('A phone number needs to be added to profile to receive motion detection alerts.');
               } else if (!motionDetectionActive) {
-                getLocalStream(localStream, phone, cam);
+                startMotionDetection(localStream, phone, cam);
               } else if (motionDetectionActive) {
                 stopMotionDetection();
               }
@@ -180,10 +180,10 @@ class SetCamDetail extends Component {
       </React.Fragment>
     );
 
-    if (motionDetected) {
+    if (motionDetectionState) {
       motion = (
         <div>
-          <h1>MOTION DETECTED</h1>
+          <h1>{motionDetectionState}</h1>
         </div>
       );
     } else {

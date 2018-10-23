@@ -6,7 +6,7 @@ const socket = io();
 
 class MotionDetectionContainer extends Container {
   state = {
-    motionDetected: false,
+    motionDetectionState: false,
     motionDetectionActive: false
   };
 
@@ -36,13 +36,24 @@ class MotionDetectionContainer extends Container {
 
   diffContext = null;
 
-  cooldownTimer = 30000;
+  cooldownTimer = 300000;
 
   userPhoneNo = null;
 
   cam = null;
 
+  startTimeout = null;
+
+  startMotionDetection = (stream, phoneNo, cam) => {
+    this.setState({ motionDetectionActive: true, motionDetectionState: 'Motion detection will start in 1 min' });
+    this.startTimeout = setTimeout(() => {
+      this.getLocalStream(stream, phoneNo, cam);
+    }, 60000);
+  };
+
   getLocalStream = (stream, phoneNo, cam) => {
+    this.setState({ motionDetectionState: 'Motion detection active' });
+
     socket.connect();
     socket.emit('enterroom', cam);
 
@@ -108,11 +119,11 @@ class MotionDetectionContainer extends Container {
 
   motionDetection = () => {
     clearInterval(this.captureInterval);
-    this.setState({ motionDetected: true });
+    this.setState({ motionDetectionState: 'Motion detected!!!' });
     console.log('motionDetection cooldown ', this.cooldownTimer);
     this.sendMotionAlert();
     setTimeout(() => {
-      this.setState({ motionDetected: false });
+      this.setState({ motionDetectionState: 'Motion detection active' });
       if (this.state.motionDetectionActive) {
         this.getLocalStream();
       }
@@ -124,13 +135,18 @@ class MotionDetectionContainer extends Container {
   };
 
   stopMotionDetection = () => {
-    clearInterval(this.captureInterval);
-    this.captureInterval = null;
-    socket.emit('leavestream', this.cam);
-    socket.removeAllListeners();
-    this.setState({ motionDetectionActive: false, motionDetected: false }).then(() => {
-      console.log('stop motion detection ', this.state.motionDetectionActive);
-    });
+    if (this.state.motionDetectionState === 'Motion detection will start in 1 min') {
+      clearTimeout(this.startTimeout);
+      this.setState({ motionDetectionActive: false, motionDetectionState: false });
+    } else {
+      clearInterval(this.captureInterval);
+      this.captureInterval = null;
+      socket.emit('leavestream', this.cam);
+      socket.removeAllListeners();
+      this.setState({ motionDetectionActive: false, motionDetectionState: false }).then(() => {
+        console.log('stop motion detection ', this.state.motionDetectionActive);
+      });
+    }
   };
 
   sendMotionAlert = () => {

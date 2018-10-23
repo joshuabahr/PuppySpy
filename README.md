@@ -10,7 +10,7 @@ Turn any webcam into a private security feed accessible from any device with int
 
 ### Private Security Feed
 
-Set up your home device as a private security feed. Log in to the same account on any other device, and you can view any streams previously set up. Additionally, users can authorize other users with a PuppySpy account to view their streams.
+Set up your home device as a private security feed. Log in to the same account on any other device, and users can view any streams previously set up. Additionally, users can authorize other users with a PuppySpy account to view their streams.
 
 ### Motion Detection With SMS Alerts
 

@@ -2,7 +2,9 @@
 
 Turn any webcam into a private security feed accessible from any device with internet access.
 
-## To try it out, visit https://www.puppyspy.tech.
+#### To try it out, visit https://www.puppyspy.tech.
+
+---
 
 ## Features
 
@@ -12,7 +14,9 @@ Set up your home device as a private security feed. Log in to the same account o
 
 ### Motion Detection With SMS Alerts
 
-## PuppySpy has a motion detection feature which will alert users to any unexpected activity occurring within their security feed. Simply add a valid US phone number to the profile and enable motion detection. Users will receive an SMS alert whenever motion is detected in their security feed.
+PuppySpy has a motion detection feature which will alert users to any unexpected activity occurring within their security feed. Simply add a valid US phone number to the profile and enable motion detection. Users will receive an SMS alert whenever motion is detected in their security feed.
+
+---
 
 ## Technology
 

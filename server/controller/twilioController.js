@@ -91,7 +91,7 @@ const removePhoneNo = (req, res) => {
 
   console.log('message received ', messageBody, userNo);
 
-  if (messageBody.toUpperCase().includes('POOP')) {
+  if (messageBody.toUpperCase().includes('STOP')) {
     const phoneNo = userNo.slice(2, 12);
     blockPhoneNo(phoneNo);
     twiml.message('Number permanently deleted');
